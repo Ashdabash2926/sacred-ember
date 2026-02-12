@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Documentary Studio — Real Worlds, Real Websites</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Crimson+Pro:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'display': ['Oswald', 'sans-serif'],
+                        'body': ['Crimson Pro', 'serif']
+                    },
+                    colors: {
+                        'electric': '#00D9FF',
+                        'charcoal': '#0A0A0A',
+                        'ash': '#1A1A1A'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0A0A0A;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .hero-text {
+            font-size: clamp(3rem, 8vw, 9rem);
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            z-index: 100;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .section-reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            animation: revealUp 0.8s ease forwards;
+        }
+
+        @keyframes revealUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stagger-1 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.4s;
+        }
+
+        .stagger-5 {
+            animation-delay: 0.5s;
+        }
+
+        .electric-glow {
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        }
+
+        .package-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .package-card:hover {
+            border-color: #00D9FF;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.2);
+        }
+
+        .process-number {
+            font-size: 12rem;
+            font-weight: 700;
+            opacity: 0.05;
+            position: absolute;
+            top: -60px;
+            left: -20px;
+            line-height: 1;
+            z-index: 0;
+        }
+
+        .cta-button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .bg-strip {
+            background: linear-gradient(135deg, #1A1A1A 0%, #0A0A0A 100%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #00D9FF 0%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+
+<body class="font-body">
+    <!-- Grain overlay -->
+    <div class="grain"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-charcoal/80 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="font-display text-xl tracking-wider">BDS</div>
+            <div class="flex gap-8 text-sm font-display tracking-wide">
+                <a href="#process" class="hover:text-electric transition-colors">PROCESS</a>
+                <a href="#packages" class="hover:text-electric transition-colors">PACKAGES</a>
+                <a href="#contact" class="hover:text-electric transition-colors">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+        <!-- Video Background -->
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-20">
+            <source src="https://cdn.coverr.co/videos/coverr-photographer-taking-pictures-in-studio-9408/1080p.mp4"
+                type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-br from-charcoal/80 via-charcoal/60 to-charcoal/80"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="section-reveal stagger-1">
+                <div class="text-electric font-display tracking-widest text-sm mb-6">BRAND DOCUMENTARY STUDIO</div>
+            </div>
+            <h1 class="hero-text font-display font-bold mb-8 section-reveal stagger-2">
+                WE DON'T<br />
+                START WITH<br />
+                <span class="text-gradient">TEMPLATES</span>
+            </h1>
+            <p
+                class="text-2xl md:text-3xl max-w-3xl font-light leading-relaxed mb-12 section-reveal stagger-3 text-white/80">
+                We spend hours capturing your real world, then build a website that feels like you and makes people
+                trust you instantly.
+            </p>
+            <div class="flex gap-6 section-reveal stagger-4">
+                <a href="#packages"
+                    class="cta-button bg-electric text-charcoal px-10 py-5 font-display text-lg tracking-wider hover:bg-white transition-all">
+                    VIEW PACKAGES
+                </a>
+                <a href="#process"
+                    class="cta-button border-2 border-electric text-electric px-10 py-5 font-display text-lg tracking-wider hover:bg-electric hover:text-charcoal transition-all">
+                    HOW IT WORKS
+                </a>
+            </div>
+        </div>
+
+        <!-- Decorative elements -->
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-electric/10 blur-[120px] rounded-full"></div>
+        <div class="absolute top-20 right-0 w-96 h-96 bg-electric/5 blur-[120px] rounded-full"></div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="py-32 bg-strip relative">
+        <!-- Background Image -->
+        <div class="absolute inset-0 opacity-5">
+            <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1600&q=80" alt=""
+                class="w-full h-full object-cover">
+        </div>
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <div class="grid md:grid-cols-2 gap-20 items-center">
+                <div>
+                    <h2 class="font-display text-6xl md:text-7xl font-bold mb-8 leading-tight">
+                        REAL WORLDS.<br />
+                        REAL <span class="text-electric">TRUST.</span>
+                    </h2>
+                    <div class="h-1 w-32 bg-electric mb-8"></div>
+                    <p class="text-xl text-white/70 leading-relaxed mb-6">
+                        Most websites look generic because they use stock photos and templates. Yours won't.
+                    </p>
+                    <p class="text-xl text-white/70 leading-relaxed">
+                        We document your environment, your craft, your hands at work. Then those images become your
+                        entire design system—colors, textures, layouts, everything.
+                    </p>
+                </div>
+                <div class="space-y-8">
+                    <div class="border-l-4 border-electric pl-6">
+                        <h3 class="font-display text-2xl mb-3">INSTANT CREDIBILITY</h3>
+                        <p class="text-white/60">People feel authenticity. Real environments build trust faster than any
+                            stock image ever could.</p>
+                    </div>
+                    <div class="border-l-4 border-electric pl-6">
+                        <h3 class="font-display text-2xl mb-3">CONTENT BANK</h3>
+                        <p class="text-white/60">Photos feed your Instagram, Google profile, brochures—everything you
+                            need for months.</p>
+                    </div>
+                    <div class="border-l-4 border-electric pl-6">
+                        <h3 class="font-display text-2xl mb-3">HIGHER CONVERSION</h3>
+                        <p class="text-white/60">When visitors see the real you, they're already halfway to booking.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="py-32 relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <div class="text-electric font-display tracking-widest text-sm mb-4">THE SIGNATURE PROCESS</div>
+                <h2 class="font-display text-6xl md:text-7xl font-bold">
+                    FIVE <span class="text-electric">STEPS</span>
+                </h2>
+            </div>
+
+            <div class="space-y-24">
+                <!-- Step 1 -->
+                <div class="relative pl-8 md:pl-20">
+                    <div class="process-number font-display text-electric">01</div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-4xl md:text-5xl font-bold mb-4">DISCOVERY</h3>
+                        <div class="h-0.5 w-20 bg-electric mb-6"></div>
+                        <p class="text-xl text-white/70 max-w-2xl">
+                            30–60 minute call. We dive deep: what you do, who it's for, what makes you premium, what
+                            emotions you want to evoke.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative pl-8 md:pl-20">
+                    <div class="process-number font-display text-electric">02</div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-4xl md:text-5xl font-bold mb-4">ON-SITE SHOOT</h3>
+                        <div class="h-0.5 w-20 bg-electric mb-6"></div>
+                        <p class="text-xl text-white/70 max-w-2xl">
+                            1–3 hours capturing everything: hands at work, tools, textures, workspace details, wide
+                            establishing shots, intimate portraits. Observational. Cinematic. Real.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative pl-8 md:pl-20">
+                    <div class="process-number font-display text-electric">03</div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-4xl md:text-5xl font-bold mb-4">VISUAL DIRECTION</h3>
+                        <div class="h-0.5 w-20 bg-electric mb-6"></div>
+                        <p class="text-xl text-white/70 max-w-2xl">
+                            We select 15–30 hero images, define your color palette, typography vibe, and integrate
+                            custom graphic elements from our artwork. Your photos become your brand.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative pl-8 md:pl-20">
+                    <div class="process-number font-display text-electric">04</div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-4xl md:text-5xl font-bold mb-4">COPY + STRUCTURE</h3>
+                        <div class="h-0.5 w-20 bg-electric mb-6"></div>
+                        <p class="text-xl text-white/70 max-w-2xl">
+                            We write and shape your site sections around your story and customer journey. You approve.
+                            We refine. No generic templates.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="relative pl-8 md:pl-20">
+                    <div class="process-number font-display text-electric">05</div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-4xl md:text-5xl font-bold mb-4">BUILD + LAUNCH</h3>
+                        <div class="h-0.5 w-20 bg-electric mb-6"></div>
+                        <p class="text-xl text-white/70 max-w-2xl">
+                            Fast, clean, mobile-first website. SEO optimized. Contact forms. Analytics tracking. Then we
+                            launch your new presence.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BTS Video Section -->
+        <div class="max-w-6xl mx-auto px-6 mt-32">
+            <div class="relative">
+                <div class="absolute -top-10 -left-10 text-electric font-display text-9xl opacity-10">BTS</div>
+                <div class="relative bg-ash border border-electric/20 overflow-hidden rounded-sm">
+                    <video controls poster="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200&q=80"
+                        class="w-full">
+                        <source src="https://cdn.coverr.co/videos/coverr-a-camera-crew-filming-indoors-6619/1080p.mp4"
+                            type="video/mp4">
+                    </video>
+                </div>
+                <div class="mt-8 text-center">
+                    <p class="text-electric font-display tracking-wider text-sm mb-2">BEHIND THE SCENES</p>
+                    <p class="text-2xl text-white/70">Watch how we transform a 3-hour shoot into a complete brand
+                        identity</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Packages Section -->
+    <section id="packages" class="py-32 bg-strip">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <div class="text-electric font-display tracking-widest text-sm mb-4">CHOOSE YOUR LEVEL</div>
+                <h2 class="font-display text-6xl md:text-7xl font-bold mb-6">
+                    THREE <span class="text-electric">PACKAGES</span>
+                </h2>
+                <p class="text-xl text-white/60 max-w-2xl mx-auto">
+                    Each one designed to match where you are and where you're going.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Starter Package -->
+                <div class="package-card bg-ash p-10 rounded-sm">
+                    <div class="text-electric font-display tracking-widest text-sm mb-4">STARTER</div>
+                    <h3 class="font-display text-4xl font-bold mb-4">ONE PAGE<br />STORY SITE</h3>
+                    <div class="h-0.5 w-16 bg-electric mb-8"></div>
+
+                    <ul class="space-y-4 mb-12 text-white/70">
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>1-page scroll site (home)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>1–1.5 hour shoot</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>15 edited images</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>Contact/booking link</span>
+                        </li>
+                    </ul>
+
+                    <div class="border-t border-white/10 pt-6 mb-8">
+                        <p class="text-sm text-white/50 mb-2">PERFECT FOR</p>
+                        <p class="text-white/70">Freelancers, therapists, coaches, tradespeople</p>
+                    </div>
+
+                    <a href="#contact"
+                        class="block text-center border-2 border-electric text-electric px-8 py-4 font-display tracking-wider hover:bg-electric hover:text-charcoal transition-all">
+                        GET STARTED
+                    </a>
+                </div>
+
+                <!-- Signature Package -->
+                <div class="package-card bg-ash p-10 rounded-sm border-2 border-electric relative">
+                    <div
+                        class="absolute -top-4 left-1/2 -translate-x-1/2 bg-electric text-charcoal px-6 py-1 font-display text-sm tracking-wider">
+                        MOST POPULAR
+                    </div>
+                    <div class="text-electric font-display tracking-widest text-sm mb-4">SIGNATURE</div>
+                    <h3 class="font-display text-4xl font-bold mb-4">FULL<br />PRESENCE</h3>
+                    <div class="h-0.5 w-16 bg-electric mb-8"></div>
+
+                    <ul class="space-y-4 mb-12 text-white/70">
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>4–6 pages (Home / About / Services / Gallery / Contact)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>2–3 hour shoot</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>40–60 edited images</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>Lightweight brand kit (colors + type + 5 graphic elements)</span>
+                        </li>
+                    </ul>
+
+                    <div class="border-t border-white/10 pt-6 mb-8">
+                        <p class="text-sm text-white/50 mb-2">PERFECT FOR</p>
+                        <p class="text-white/70">Studios, retreats, boutique services</p>
+                    </div>
+
+                    <a href="#contact"
+                        class="block text-center bg-electric text-charcoal px-8 py-4 font-display tracking-wider hover:bg-white transition-all">
+                        GET STARTED
+                    </a>
+                </div>
+
+                <!-- Premium Package -->
+                <div class="package-card bg-ash p-10 rounded-sm">
+                    <div class="text-electric font-display tracking-widest text-sm mb-4">PREMIUM</div>
+                    <h3 class="font-display text-4xl font-bold mb-4">BRAND<br />DOCUMENTARY</h3>
+                    <div class="h-0.5 w-16 bg-electric mb-8"></div>
+
+                    <ul class="space-y-4 mb-12 text-white/70">
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>6–10 pages + landing page templates</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>Half-day shoot</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>80–120 images + short reels (optional)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-electric mt-1">▸</span>
+                            <span>Advanced copywriting + SEO setup</span>
+                        </li>
+                    </ul>
+
+                    <div class="border-t border-white/10 pt-6 mb-8">
+                        <p class="text-sm text-white/50 mb-2">PERFECT FOR</p>
+                        <p class="text-white/70">Higher-ticket brands, established businesses</p>
+                    </div>
+
+                    <a href="#contact"
+                        class="block text-center border-2 border-electric text-electric px-8 py-4 font-display tracking-wider hover:bg-electric hover:text-charcoal transition-all">
+                        GET STARTED
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visual Showcase Section -->
+    <section class="py-32 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <div class="text-electric font-display tracking-widest text-sm mb-4">THE DOCUMENTARY APPROACH</div>
+                <h2 class="font-display text-6xl md:text-7xl font-bold">
+                    VISUAL <span class="text-electric">STORIES</span>
+                </h2>
+            </div>
+
+            <!-- Grid Gallery -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                <div class="col-span-2 row-span-2 relative overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1554844453-7ea2a562a6c8?w=800&q=80" alt="Hands at work"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                    <div
+                        class="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <p class="font-display text-2xl">Hands at Work</p>
+                        <p class="text-sm text-white/70">Craft in action</p>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1487611459768-bd414656ea10?w=400&q=80"
+                        alt="Workspace detail"
+                        class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-electric/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                </div>
+                <div class="relative overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1556910110-a5a63dfd393c?w=400&q=80"
+                        alt="Tools and materials"
+                        class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-electric/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                </div>
+                <div class="relative overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&q=80"
+                        alt="Portrait session"
+                        class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-electric/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                </div>
+                <div class="relative overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80"
+                        alt="Studio environment"
+                        class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-electric/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                </div>
+                <div class="col-span-2 relative overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1556139943-4bdca53adf1e?w=800&q=80"
+                        alt="Creative workspace"
+                        class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-charcoal/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                    <div
+                        class="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <p class="font-display text-2xl">Environment Shots</p>
+                        <p class="text-sm text-white/70">Where the magic happens</p>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400&q=80" alt="Detail shot"
+                        class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-electric/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Process Video -->
+            <div class="relative max-w-5xl mx-auto">
+                <div class="relative overflow-hidden rounded-sm">
+                    <video controls class="w-full"
+                        poster="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200&q=80">
+                        <source
+                            src="https://cdn.coverr.co/videos/coverr-a-photographer-editing-photos-on-a-laptop-5237/1080p.mp4"
+                            type="video/mp4">
+                    </video>
+                </div>
+                <div class="absolute -bottom-6 -right-6 w-48 h-48 bg-electric/10 blur-[100px]"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shot List Section -->
+    <section class="py-32 bg-charcoal">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <div class="text-electric font-display tracking-widest text-sm mb-4">WHAT WE CAPTURE</div>
+                <h2 class="font-display text-6xl md:text-7xl font-bold">
+                    THE <span class="text-electric">ESSENTIALS</span>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-16">
+                <div class="space-y-12">
+                    <div class="relative group">
+                        <div
+                            class="absolute -left-4 top-0 w-1 h-full bg-electric transform origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500">
+                        </div>
+                        <div class="mb-4 overflow-hidden rounded-sm">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+                                alt="Hero portrait"
+                                class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                        <h3 class="font-display text-3xl font-bold mb-4 text-electric">Hero Portrait</h3>
+                        <p class="text-white/70 text-lg">Subject looking calm, grounded, approachable. This is the first
+                            impression.</p>
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute -left-4 top-0 w-1 h-full bg-electric transform origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500">
+                        </div>
+                        <div class="mb-4 overflow-hidden rounded-sm">
+                            <img src="https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=600&q=80"
+                                alt="Hands at work"
+                                class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                        <h3 class="font-display text-3xl font-bold mb-4 text-electric">Hands at Work</h3>
+                        <p class="text-white/70 text-lg">The "proof" shots. Craft in action. Process revealed.</p>
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute -left-4 top-0 w-1 h-full bg-electric transform origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500">
+                        </div>
+                        <div class="mb-4 overflow-hidden rounded-sm">
+                            <img src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=600&q=80"
+                                alt="Tools and materials"
+                                class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                        <h3 class="font-display text-3xl font-bold mb-4 text-electric">Tools & Materials</h3>
+                        <p class="text-white/70 text-lg">Texture shots for backgrounds. The physical elements of your
+                            craft.</p>
+                    </div>
+                </div>
+                <div class="space-y-12">
+                    <div class="relative group">
+                        <div
+                            class="absolute -left-4 top-0 w-1 h-full bg-electric transform origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500">
+                        </div>
+                        <div class="mb-4 overflow-hidden rounded-sm">
+                            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80"
+                                alt="Environment"
+                                class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                        <h3 class="font-display text-3xl font-bold mb-4 text-electric">Environment</h3>
+                        <p class="text-white/70 text-lg">Wide and medium shots. Context. The space where magic happens.
+                        </p>
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute -left-4 top-0 w-1 h-full bg-electric transform origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500">
+                        </div>
+                        <div class="mb-4 overflow-hidden rounded-sm">
+                            <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=80"
+                                alt="Client experience"
+                                class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                        <h3 class="font-display text-3xl font-bold mb-4 text-electric">Client Experience</h3>
+                        <p class="text-white/70 text-lg">Welcoming moments, consultation, results. The journey you
+                            create.</p>
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute -left-4 top-0 w-1 h-full bg-electric transform origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500">
+                        </div>
+                        <div class="mb-4 overflow-hidden rounded-sm">
+                            <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&q=80"
+                                alt="Luxury details"
+                                class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                        <h3 class="font-display text-3xl font-bold mb-4 text-electric">Luxury Details</h3>
+                        <p class="text-white/70 text-lg">Neatness, craft, care. The signals that communicate premium
+                            quality.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who It's For -->
+    <section class="py-32 bg-strip relative overflow-hidden">
+        <!-- Background collage -->
+        <div class="absolute inset-0 opacity-[0.03]">
+            <div class="grid grid-cols-4 h-full">
+                <img src="https://images.unsplash.com/photo-1598964356161-754cc07fcd36?w=400&q=80" alt=""
+                    class="w-full h-full object-cover">
+                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&q=80" alt=""
+                    class="w-full h-full object-cover">
+                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80" alt=""
+                    class="w-full h-full object-cover">
+                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400&q=80" alt=""
+                    class="w-full h-full object-cover">
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-20">
+                <h2 class="font-display text-6xl md:text-7xl font-bold mb-6">
+                    WHO THIS <span class="text-electric">CRUSHES</span> FOR
+                </h2>
+                <p class="text-xl text-white/60 max-w-2xl mx-auto">
+                    Industries where trust, craft, and authenticity drive bookings.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 text-lg">
+                <div class="bg-ash p-8 border-l-2 border-electric">
+                    <h3 class="font-display text-2xl mb-4">CREATIVE SERVICES</h3>
+                    <ul class="space-y-2 text-white/70">
+                        <li>• Tattoo artists</li>
+                        <li>• Barbers & stylists</li>
+                        <li>• Interior designers</li>
+                        <li>• Architects</li>
+                    </ul>
+                </div>
+                <div class="bg-ash p-8 border-l-2 border-electric">
+                    <h3 class="font-display text-2xl mb-4">WELLNESS & COACHING</h3>
+                    <ul class="space-y-2 text-white/70">
+                        <li>• Therapists</li>
+                        <li>• Relationship coaches</li>
+                        <li>• Yoga & fitness coaches</li>
+                        <li>• Wellness studios</li>
+                    </ul>
+                </div>
+                <div class="bg-ash p-8 border-l-2 border-electric">
+                    <h3 class="font-display text-2xl mb-4">EXPERIENCES</h3>
+                    <ul class="space-y-2 text-white/70">
+                        <li>• Retreats</li>
+                        <li>• Surf/climb guides</li>
+                        <li>• Chefs & bakers</li>
+                        <li>• Craft brands</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof / Before & After -->
+    <section class="py-32 bg-charcoal">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <div class="text-electric font-display tracking-widest text-sm mb-4">THE TRANSFORMATION</div>
+                <h2 class="font-display text-6xl md:text-7xl font-bold mb-6">
+                    FROM GENERIC TO<br />
+                    <span class="text-electric">UNFORGETTABLE</span>
+                </h2>
+            </div>
+
+            <!-- Split comparison grid -->
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <div class="space-y-6">
+                    <div class="bg-ash border-l-4 border-red-500 p-8">
+                        <p class="text-sm text-red-400 font-display tracking-wider mb-4">❌ BEFORE: GENERIC STOCK PHOTOS
+                        </p>
+                        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&q=80"
+                            alt="Generic stock photo" class="w-full h-64 object-cover mb-4 grayscale opacity-50">
+                        <ul class="space-y-2 text-white/50 text-sm">
+                            <li>• Looks like every other website</li>
+                            <li>• No personal connection</li>
+                            <li>• Zero credibility signals</li>
+                            <li>• Forgettable and bland</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-ash border-l-4 border-electric p-8">
+                        <p class="text-sm text-electric font-display tracking-wider mb-4">✓ AFTER: YOUR REAL WORLD</p>
+                        <img src="https://images.unsplash.com/photo-1556139943-4430a45a8773?w=600&q=80"
+                            alt="Documentary style photo" class="w-full h-64 object-cover mb-4">
+                        <ul class="space-y-2 text-white/80 text-sm">
+                            <li>• Instantly recognizable as YOU</li>
+                            <li>• Authentic and trustworthy</li>
+                            <li>• Proves your expertise visually</li>
+                            <li>• Memorable brand presence</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client Results Strip -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="relative overflow-hidden rounded-sm group">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80"
+                        alt="Client workspace"
+                        class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/50 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <p class="text-electric font-display text-sm tracking-wider mb-2">WELLNESS STUDIO</p>
+                        <p class="text-white/80 text-sm">"Bookings increased 340% in the first month. People finally saw
+                            the real space."</p>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden rounded-sm group">
+                    <img src="https://images.unsplash.com/photo-1487611459768-bd414656ea10?w=600&q=80"
+                        alt="Client workspace"
+                        class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/50 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <p class="text-electric font-display text-sm tracking-wider mb-2">TATTOO ARTIST</p>
+                        <p class="text-white/80 text-sm">"My DMs went from generic inquiries to people saying 'I need to
+                            work with YOU specifically.'"</p>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden rounded-sm group">
+                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80"
+                        alt="Client workspace"
+                        class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/50 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <p class="text-electric font-display text-sm tracking-wider mb-2">CHEF / PRIVATE DINING</p>
+                        <p class="text-white/80 text-sm">"Clients book sight unseen now. They trust the process because
+                            they've already seen it."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="py-32 relative overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1600&q=80" alt=""
+                class="w-full h-full object-cover opacity-10">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-br from-charcoal/90 via-charcoal/80 to-charcoal/90"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-electric/10 via-transparent to-transparent"></div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <h2 class="font-display text-6xl md:text-8xl font-bold mb-8 leading-tight">
+                READY TO STOP<br />
+                LOOKING <span class="text-gradient">GENERIC?</span>
+            </h2>
+            <p class="text-2xl text-white/70 mb-12 max-w-2xl mx-auto">
+                Limited spots available for founder-rate builds. Let's document your world and build something
+                unforgettable.
+            </p>
+            <a href="/cdn-cgi/l/email-protection#6f070a0303002f0d1d0e010b0b000c1a020a011b0e1d16411c1b1a0b0600"
+                class="cta-button inline-block bg-electric text-charcoal px-14 py-6 font-display text-xl tracking-wider hover:bg-white transition-all">
+                GET IN TOUCH
+            </a>
+        </div>
+
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-electric/10 blur-[120px] rounded-full">
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="font-display text-2xl tracking-wider">BDS</div>
+                <div class="text-white/50 text-sm">
+                    © 2026 Brand Documentary Studio. Real worlds. Real websites.
+                </div>
+                <div class="flex gap-8 text-sm font-display tracking-wide">
+                    <a href="#" class="hover:text-electric transition-colors">INSTAGRAM</a>
+                    <a href="#" class="hover:text-electric transition-colors">PORTFOLIO</a>
+                    <a href="/cdn-cgi/l/email-protection#3a525f5656557a58485b545e5e55594f575f544e5b484314494e4f5e5355"
+                        class="hover:text-electric transition-colors">EMAIL</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements that need animation
+        document.querySelectorAll('.package-card, .process-number').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Parallax effect for video background
+        window.addEventListener('scroll', () => {
+            const video = document.querySelector('video[autoplay]');
+
+            if (video) {
+                const scrolled = window.pageYOffset;
+                video.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+
+</html>

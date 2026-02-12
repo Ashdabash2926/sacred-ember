@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisan Coffee Lab - Specialty Coffee & Roastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --cream: #FBFAF3;
+            --dark: #1A1A1A;
+            --brown: #4A3428;
+            --accent: #D4A574;
+            --light-brown: #8B7355;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .serif {
+            font-family: 'EB Garamond', serif;
+        }
+
+        /* Language Toggle Styles */
+        .language-toggle {
+            position: relative;
+            width: 80px;
+            height: 36px;
+            background: rgba(26, 26, 26, 0.08);
+            border-radius: 18px;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .language-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 38px;
+            height: 32px;
+            background: var(--dark);
+            border-radius: 16px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        .language-toggle.spanish .language-toggle-slider {
+            transform: translateX(40px);
+        }
+
+        .language-options {
+            display: flex;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .language-option {
+            flex: 1;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+
+        .language-option.active {
+            color: white;
+        }
+
+        .language-option.inactive {
+            color: var(--dark);
+            opacity: 0.5;
+        }
+
+        .language-option.inactive:hover {
+            opacity: 0.7;
+        }
+
+        /* Text transition styles */
+        .lang-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .lang-content {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .lang-content.hide {
+            opacity: 0;
+            transform: translateY(-10px);
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .lang-content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Smooth animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 1s ease-out forwards;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-400 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-500 {
+            animation-delay: 0.5s;
+        }
+
+        .delay-600 {
+            animation-delay: 0.6s;
+        }
+
+        /* Hero section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(251, 250, 243, 0.95);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(26, 26, 26, 0.05);
+        }
+
+        nav.scrolled {
+            background: rgba(251, 250, 243, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--dark);
+            color: white;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background: var(--brown);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            background: transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+
+        /* Cards */
+        .product-card {
+            background: white;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(26, 26, 26, 0.05);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Image hover */
+        .image-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-wrapper img {
+            transition: transform 0.6s ease;
+        }
+
+        .image-wrapper:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Split section */
+        .split-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 80vh;
+        }
+
+        @media (max-width: 768px) {
+            .split-section {
+                grid-template-columns: 1fr;
+            }
+
+            .language-toggle {
+                width: 70px;
+                height: 32px;
+            }
+
+            .language-toggle-slider {
+                width: 33px;
+                height: 28px;
+            }
+
+            .language-toggle.spanish .language-toggle-slider {
+                transform: translateX(35px);
+            }
+
+            .language-option {
+                font-size: 10px;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Text selection */
+        ::selection {
+            background: var(--accent);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-xl font-medium tracking-tight opacity-0 animate-fade-in delay-100">
+                <span class="lang-text" data-en="ARTISAN COFFEE LAB" data-es="LABORATORIO DE CAFÉ ARTESANAL">
+                    <span class="lang-content show">ARTISAN COFFEE LAB</span>
+                </span>
+            </div>
+
+            <!-- Language Toggle -->
+            <div class="language-toggle opacity-0 animate-fade-in delay-200" id="languageToggle">
+                <div class="language-toggle-slider"></div>
+                <div class="language-options">
+                    <div class="language-option active" id="optionEn">EN</div>
+                    <div class="language-option inactive" id="optionEs">ES</div>
+                </div>
+            </div>
+
+            <div class="hidden md:flex space-x-8 text-sm font-medium opacity-0 animate-fade-in delay-300">
+                <a href="#coffee" class="hover:opacity-60 transition-opacity lang-text" data-en="Coffee" data-es="Café">
+                    <span class="lang-content show">Coffee</span>
+                </a>
+                <a href="#about" class="hover:opacity-60 transition-opacity lang-text" data-en="About"
+                    data-es="Nosotros">
+                    <span class="lang-content show">About</span>
+                </a>
+                <a href="#story" class="hover:opacity-60 transition-opacity lang-text" data-en="Our Story"
+                    data-es="Nuestra Historia">
+                    <span class="lang-content show">Our Story</span>
+                </a>
+                <a href="#visit" class="hover:opacity-60 transition-opacity lang-text" data-en="Visit"
+                    data-es="Visítanos">
+                    <span class="lang-content show">Visit</span>
+                </a>
+            </div>
+            <button class="md:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="max-w-7xl mx-auto px-6 text-center text-white">
+            <div class="opacity-0 animate-fade-in-up delay-100">
+                <p class="text-sm tracking-widest mb-6 lang-text" data-en="FAMILY · PASSION · CRAFT"
+                    data-es="FAMILIA · PASIÓN · ARTESANÍA">
+                    <span class="lang-content show">FAMILY · PASSION · CRAFT</span>
+                </p>
+            </div>
+            <h1 class="serif text-6xl md:text-7xl lg:text-8xl font-medium mb-8 opacity-0 animate-fade-in-up delay-200 lang-text"
+                style="line-height: 1.1;" data-en="Come as a guest<br />leave as a friend"
+                data-es="Ven como invitada<br />vete como amiga">
+                <span class="lang-content show">Come as a guest<br />leave as a friend</span>
+            </h1>
+            <p class="text-lg md:text-xl max-w-2xl mx-auto mb-12 opacity-0 animate-fade-in-up delay-300 font-light lang-text"
+                data-en="A warm, family-run café where every cup is crafted with care and every guest feels at home. Come experience the difference that passion makes."
+                data-es="Un café cálido y familiar donde cada taza se elabora con cariño y cada invitado se siente como en casa. Ven a experimentar la diferencia que hace la pasión.">
+                <span class="lang-content show">A warm, family-run café where every cup is crafted with care and every
+                    guest feels at home. Come experience the difference that passion makes.</span>
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-in-up delay-400">
+                <button class="btn-primary px-8 py-4 text-sm tracking-wide lang-text" data-en="Explore Our Coffee"
+                    data-es="Explora Nuestro Café">
+                    <span class="lang-content show">Explore Our Coffee</span>
+                </button>
+                <button class="btn-outline px-8 py-4 text-sm tracking-wide lang-text" data-en="Our Story"
+                    data-es="Nuestra Historia">
+                    <span class="lang-content show">Our Story</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Coffee Section -->
+    <section id="coffee" class="py-24 px-6" style="background: var(--cream);">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <p class="text-xs tracking-widest mb-4 opacity-60 lang-text" data-en="HANDPICKED WITH CARE"
+                    data-es="SELECCIONADO A MANO">
+                    <span class="lang-content show">HANDPICKED WITH CARE</span>
+                </p>
+                <h2 class="serif text-5xl md:text-6xl font-medium mb-6 lang-text" data-en="Our Featured Coffee"
+                    data-es="Nuestro Café Destacado">
+                    <span class="lang-content show">Our Featured Coffee</span>
+                </h2>
+                <p class="text-lg max-w-2xl mx-auto font-light opacity-80 lang-text"
+                    data-en="Each coffee is personally selected by our family and roasted in small batches to bring out its unique character. We source from farmers we know and trust."
+                    data-es="Cada café es seleccionado personalmente por nuestra familia y tostado en pequeños lotes para resaltar su carácter único. Compramos de agricultores que conocemos y en quienes confiamos.">
+                    <span class="lang-content show">Each coffee is personally selected by our family and roasted in
+                        small batches to bring out its unique character. We source from farmers we know and
+                        trust.</span>
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Coffee Card 1 -->
+                <div class="product-card rounded-lg overflow-hidden">
+                    <div class="image-wrapper aspect-square">
+                        <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80"
+                            alt="Coffee beans" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="p-6">
+                        <p class="text-xs tracking-widest mb-2 opacity-60 lang-text" data-en="ETHIOPIA · NATURAL"
+                            data-es="ETIOPÍA · NATURAL">
+                            <span class="lang-content show">ETHIOPIA · NATURAL</span>
+                        </p>
+                        <h3 class="serif text-2xl font-medium mb-3 lang-text" data-en="Guji Highlands"
+                            data-es="Tierras Altas Guji">
+                            <span class="lang-content show">Guji Highlands</span>
+                        </h3>
+                        <p class="text-sm mb-4 font-light opacity-80 lang-text"
+                            data-en="Blueberry, dark chocolate, and honey. A vibrant natural process coffee from Guji, Ethiopia."
+                            data-es="Arándano, chocolate oscuro y miel. Un café de proceso natural vibrante de Guji, Etiopía.">
+                            <span class="lang-content show">Blueberry, dark chocolate, and honey. A vibrant natural
+                                process coffee from Guji, Ethiopia.</span>
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-medium">$24</span>
+                            <button class="text-xs tracking-wider hover:opacity-60 transition-opacity lang-text"
+                                data-en="ADD TO CART →" data-es="AÑADIR AL CARRITO →">
+                                <span class="lang-content show">ADD TO CART →</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coffee Card 2 -->
+                <div class="product-card rounded-lg overflow-hidden">
+                    <div class="image-wrapper aspect-square">
+                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80"
+                            alt="Coffee roasting" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="p-6">
+                        <p class="text-xs tracking-widest mb-2 opacity-60 lang-text" data-en="COLOMBIA · WASHED"
+                            data-es="COLOMBIA · LAVADO">
+                            <span class="lang-content show">COLOMBIA · WASHED</span>
+                        </p>
+                        <h3 class="serif text-2xl font-medium mb-3 lang-text" data-en="Cauca Reserve"
+                            data-es="Reserva Cauca">
+                            <span class="lang-content show">Cauca Reserve</span>
+                        </h3>
+                        <p class="text-sm mb-4 font-light opacity-80 lang-text"
+                            data-en="Caramel, citrus, and black tea. Clean and balanced from high altitude farms in Cauca."
+                            data-es="Caramelo, cítricos y té negro. Limpio y equilibrado de fincas de alta altitud en el Cauca.">
+                            <span class="lang-content show">Caramel, citrus, and black tea. Clean and balanced from high
+                                altitude farms in Cauca.</span>
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-medium">$22</span>
+                            <button class="text-xs tracking-wider hover:opacity-60 transition-opacity lang-text"
+                                data-en="ADD TO CART →" data-es="AÑADIR AL CARRITO →">
+                                <span class="lang-content show">ADD TO CART →</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coffee Card 3 -->
+                <div class="product-card rounded-lg overflow-hidden">
+                    <div class="image-wrapper aspect-square">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80"
+                            alt="Pour over coffee" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="p-6">
+                        <p class="text-xs tracking-widest mb-2 opacity-60 lang-text" data-en="BLEND · SIGNATURE"
+                            data-es="MEZCLA · EXCLUSIVA">
+                            <span class="lang-content show">BLEND · SIGNATURE</span>
+                        </p>
+                        <h3 class="serif text-2xl font-medium mb-3 lang-text" data-en="House Blend"
+                            data-es="Mezcla de la Casa">
+                            <span class="lang-content show">House Blend</span>
+                        </h3>
+                        <p class="text-sm mb-4 font-light opacity-80 lang-text"
+                            data-en="Dark chocolate, hazelnut, and stone fruit. Our versatile signature blend for all methods."
+                            data-es="Chocolate oscuro, avellana y fruta de hueso. Nuestra mezcla exclusiva versátil para todos los métodos.">
+                            <span class="lang-content show">Dark chocolate, hazelnut, and stone fruit. Our versatile
+                                signature blend for all methods.</span>
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-medium">$20</span>
+                            <button class="text-xs tracking-wider hover:opacity-60 transition-opacity lang-text"
+                                data-en="ADD TO CART →" data-es="AÑADIR AL CARRITO →">
+                                <span class="lang-content show">ADD TO CART →</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <button class="btn-primary px-10 py-4 text-sm tracking-wide lang-text" data-en="View All Coffee"
+                    data-es="Ver Todo el Café">
+                    <span class="lang-content show">View All Coffee</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Split Section - Image & Content -->
+    <section class="split-section">
+        <div class="relative"
+            style="background: url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=1200&q=80') center/cover;">
+        </div>
+        <div class="flex items-center justify-center px-6 md:px-16 py-20"
+            style="background: var(--dark); color: white;">
+            <div class="max-w-xl">
+                <p class="text-xs tracking-widest mb-6 opacity-60 lang-text" data-en="OUR PROCESS"
+                    data-es="NUESTRO PROCESO">
+                    <span class="lang-content show">OUR PROCESS</span>
+                </p>
+                <h2 class="serif text-4xl md:text-5xl font-medium mb-6 lang-text" data-en="Roasted by Hand, Daily"
+                    data-es="Tostado a Mano, Diariamente">
+                    <span class="lang-content show">Roasted by Hand, Daily</span>
+                </h2>
+                <p class="text-base leading-relaxed mb-6 font-light opacity-90 lang-text"
+                    data-en="Every morning, our family roasts fresh batches in our small roastery. We carefully monitor each roast, adjusting by feel and experience to bring out the best in every bean."
+                    data-es="Cada mañana, nuestra familia tuesta lotes frescos en nuestra pequeña tostadora. Monitoreamos cuidadosamente cada tostado, ajustando por intuición y experiencia para resaltar lo mejor de cada grano.">
+                    <span class="lang-content show">Every morning, our family roasts fresh batches in our small
+                        roastery. We carefully monitor each roast, adjusting by feel and experience to bring out the
+                        best in every bean.</span>
+                </p>
+                <p class="text-base leading-relaxed mb-8 font-light opacity-90 lang-text"
+                    data-en="It's a labor of love that's been passed down through our family. We believe great coffee comes from patience, care, and knowing exactly what we're serving to our guests."
+                    data-es="Es un trabajo de amor que ha sido transmitido a través de nuestra familia. Creemos que el gran café viene de la paciencia, el cuidado y saber exactamente qué estamos sirviendo a nuestros invitados.">
+                    <span class="lang-content show">It's a labor of love that's been passed down through our family. We
+                        believe great coffee comes from patience, care, and knowing exactly what we're serving to our
+                        guests.</span>
+                </p>
+                <button class="btn-outline px-8 py-3 text-sm tracking-wide lang-text" data-en="Learn Our Process"
+                    data-es="Conoce Nuestro Proceso">
+                    <span class="lang-content show">Learn Our Process</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section id="story" class="py-24 px-6" style="background: white;">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <p class="text-xs tracking-widest mb-6 opacity-60 lang-text" data-en="OUR FAMILY STORY"
+                        data-es="NUESTRA HISTORIA FAMILIAR">
+                        <span class="lang-content show">OUR FAMILY STORY</span>
+                    </p>
+                    <h2 class="serif text-4xl md:text-5xl font-medium mb-6 lang-text" data-en="A Passion Shared"
+                        data-es="Una Pasión Compartida">
+                        <span class="lang-content show">A Passion Shared</span>
+                    </h2>
+                    <p class="text-lg leading-relaxed mb-6 font-light opacity-90 lang-text"
+                        data-en="What started as a dream in our family kitchen has grown into this cozy café. We source our beans directly from farmers we've built relationships with over the years, often visiting them to understand their craft."
+                        data-es="Lo que comenzó como un sueño en la cocina de nuestra familia se ha convertido en este acogedor café. Compramos nuestros granos directamente de agricultores con quienes hemos construido relaciones a lo largo de los años, a menudo visitándolos para entender su oficio.">
+                        <span class="lang-content show">What started as a dream in our family kitchen has grown into
+                            this cozy café. We source our beans directly from farmers we've built relationships with
+                            over the years, often visiting them to understand their craft.</span>
+                    </p>
+                    <p class="text-lg leading-relaxed mb-8 font-light opacity-90 lang-text"
+                        data-en="Every member of our family plays a role—from roasting to serving. We're here because we love what we do and the community we've built around great coffee."
+                        data-es="Cada miembro de nuestra familia tiene un papel—desde tostar hasta servir. Estamos aquí porque amamos lo que hacemos y la comunidad que hemos construido alrededor del buen café.">
+                        <span class="lang-content show">Every member of our family plays a role—from roasting to
+                            serving. We're here because we love what we do and the community we've built around great
+                            coffee.</span>
+                    </p>
+
+                    <div class="grid grid-cols-3 gap-6 mb-8 py-6 border-t border-b border-gray-200">
+                        <div>
+                            <div class="text-3xl font-medium mb-1 lang-text" data-en="Small" data-es="Pequeños">
+                                <span class="lang-content show">Small</span>
+                            </div>
+                            <div class="text-xs tracking-wider opacity-60 lang-text" data-en="BATCHES" data-es="LOTES">
+                                <span class="lang-content show">BATCHES</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-medium mb-1">100%</div>
+                            <div class="text-xs tracking-wider opacity-60 lang-text" data-en="FAMILY RUN"
+                                data-es="FAMILIAR">
+                                <span class="lang-content show">FAMILY RUN</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-medium mb-1 lang-text" data-en="Daily" data-es="Diario">
+                                <span class="lang-content show">Daily</span>
+                            </div>
+                            <div class="text-xs tracking-wider opacity-60 lang-text" data-en="FRESH ROASTED"
+                                data-es="TOSTADO FRESCO">
+                                <span class="lang-content show">FRESH ROASTED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary px-8 py-3 text-sm tracking-wide lang-text" data-en="Read Full Story"
+                        data-es="Lee la Historia Completa">
+                        <span class="lang-content show">Read Full Story</span>
+                    </button>
+                </div>
+                <div class="image-wrapper rounded-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&q=80"
+                        alt="Barista at work" class="w-full h-full object-cover" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-24 px-6" style="background: var(--cream);">
+        <div class="max-w-5xl mx-auto text-center">
+            <p class="text-xs tracking-widest mb-6 opacity-60 lang-text" data-en="OUR VALUES"
+                data-es="NUESTROS VALORES">
+                <span class="lang-content show">OUR VALUES</span>
+            </p>
+            <h2 class="serif text-4xl md:text-5xl font-medium mb-6 lang-text" data-en="What Matters to Us"
+                data-es="Lo Que Nos Importa">
+                <span class="lang-content show">What Matters to Us</span>
+            </h2>
+            <p class="text-lg max-w-3xl mx-auto mb-12 font-light opacity-90 lang-text"
+                data-en="We're a small family operation that cares deeply about quality, relationships, and creating a welcoming space. Every decision we make is guided by these principles."
+                data-es="Somos una pequeña operación familiar que se preocupa profundamente por la calidad, las relaciones y crear un espacio acogedor. Cada decisión que tomamos está guiada por estos principios.">
+                <span class="lang-content show">We're a small family operation that cares deeply about quality,
+                    relationships, and creating a welcoming space. Every decision we make is guided by these
+                    principles.</span>
+            </p>
+
+            <div class="grid md:grid-cols-4 gap-8 mt-16">
+                <div>
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                        style="background: rgba(26, 26, 26, 0.05);">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-medium mb-2 lang-text" data-en="Personal Touch" data-es="Toque Personal">
+                        <span class="lang-content show">Personal Touch</span>
+                    </h3>
+                    <p class="text-sm font-light opacity-70 lang-text"
+                        data-en="We know our farmers and our guests by name"
+                        data-es="Conocemos a nuestros agricultores e invitados por nombre">
+                        <span class="lang-content show">We know our farmers and our guests by name</span>
+                    </p>
+                </div>
+
+                <div>
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                        style="background: rgba(26, 26, 26, 0.05);">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-medium mb-2 lang-text" data-en="Made with Care" data-es="Hecho con Cariño">
+                        <span class="lang-content show">Made with Care</span>
+                    </h3>
+                    <p class="text-sm font-light opacity-70 lang-text"
+                        data-en="Every cup is crafted with attention and love"
+                        data-es="Cada taza se elabora con atención y amor">
+                        <span class="lang-content show">Every cup is crafted with attention and love</span>
+                    </p>
+                </div>
+
+                <div>
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                        style="background: rgba(26, 26, 26, 0.05);">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-medium mb-2 lang-text" data-en="Family Operated" data-es="Operado por Familia">
+                        <span class="lang-content show">Family Operated</span>
+                    </h3>
+                    <p class="text-sm font-light opacity-70 lang-text"
+                        data-en="Multiple generations working together daily"
+                        data-es="Múltiples generaciones trabajando juntas diariamente">
+                        <span class="lang-content show">Multiple generations working together daily</span>
+                    </p>
+                </div>
+
+                <div>
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                        style="background: rgba(26, 26, 26, 0.05);">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                    </div>
+                    <h3 class="font-medium mb-2 lang-text" data-en="Welcoming Space" data-es="Espacio Acogedor">
+                        <span class="lang-content show">Welcoming Space</span>
+                    </h3>
+                    <p class="text-sm font-light opacity-70 lang-text" data-en="A cozy home away from home for everyone"
+                        data-es="Un hogar acogedor lejos de casa para todos">
+                        <span class="lang-content show">A cozy home away from home for everyone</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visit Section -->
+    <section id="visit" class="py-24 px-6" style="background: var(--dark); color: white;">
+        <div class="max-w-5xl mx-auto text-center">
+            <p class="text-xs tracking-widest mb-6 opacity-60 lang-text" data-en="COME SAY HELLO"
+                data-es="VEN A SALUDAR">
+                <span class="lang-content show">COME SAY HELLO</span>
+            </p>
+            <h2 class="serif text-4xl md:text-5xl font-medium mb-6 lang-text" data-en="Visit Our Café"
+                data-es="Visita Nuestro Café">
+                <span class="lang-content show">Visit Our Café</span>
+            </h2>
+            <p class="text-lg max-w-2xl mx-auto mb-12 font-light opacity-90 lang-text"
+                data-en="Our doors are always open. Come in for a cup of coffee, stay for good conversation. Whether you need a quiet spot to work or just want to chat, we'd love to see you."
+                data-es="Nuestras puertas siempre están abiertas. Ven por una taza de café, quédate por la buena conversación. Ya sea que necesites un lugar tranquilo para trabajar o simplemente quieras charlar, nos encantaría verte.">
+                <span class="lang-content show">Our doors are always open. Come in for a cup of coffee, stay for good
+                    conversation. Whether you need a quiet spot to work or just want to chat, we'd love to see
+                    you.</span>
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="p-6 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                    <h3 class="font-medium mb-3 lang-text" data-en="Location" data-es="Ubicación">
+                        <span class="lang-content show">Location</span>
+                    </h3>
+                    <p class="text-sm font-light opacity-80">
+                        123 Coffee Street<br />
+                        Downtown District<br />
+                        City, State 12345
+                    </p>
+                </div>
+
+                <div class="p-6 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                    <h3 class="font-medium mb-3 lang-text" data-en="Hours" data-es="Horario">
+                        <span class="lang-content show">Hours</span>
+                    </h3>
+                    <p class="text-sm font-light opacity-80 lang-text"
+                        data-en="Monday - Friday: 7am - 6pm<br />Saturday - Sunday: 8am - 5pm"
+                        data-es="Lunes - Viernes: 7am - 6pm<br />Sábado - Domingo: 8am - 5pm">
+                        <span class="lang-content show">Monday - Friday: 7am - 6pm<br />Saturday - Sunday: 8am -
+                            5pm</span>
+                    </p>
+                </div>
+
+                <div class="p-6 rounded-lg" style="background: rgba(255, 255, 255, 0.05);">
+                    <h3 class="font-medium mb-3 lang-text" data-en="Contact" data-es="Contacto">
+                        <span class="lang-content show">Contact</span>
+                    </h3>
+                    <p class="text-sm font-light opacity-80">
+                        (555) 123-4567<br />
+                        <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                            data-cfemail="056d6069696a456477716c76646b666a636360606964672b666a68">[email&#160;protected]</a>
+                    </p>
+                </div>
+            </div>
+
+            <button class="btn-outline px-10 py-4 text-sm tracking-wide lang-text" data-en="Get Directions"
+                data-es="Obtener Direcciones">
+                <span class="lang-content show">Get Directions</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 px-6 border-t" style="background: var(--cream); border-color: rgba(26, 26, 26, 0.1);">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="md:col-span-2">
+                    <div class="text-xl font-medium tracking-tight mb-4 lang-text" data-en="ARTISAN COFFEE LAB"
+                        data-es="LABORATORIO DE CAFÉ ARTESANAL">
+                        <span class="lang-content show">ARTISAN COFFEE LAB</span>
+                    </div>
+                    <p class="text-sm font-light opacity-70 mb-6 max-w-md lang-text"
+                        data-en="A family-run café dedicated to great coffee, warm hospitality, and building lasting connections. Come as a guest, leave as a friend."
+                        data-es="Un café familiar dedicado al gran café, la cálida hospitalidad y la construcción de conexiones duraderas. Ven como invitado, vete como amigo.">
+                        <span class="lang-content show">A family-run café dedicated to great coffee, warm hospitality,
+                            and building lasting connections. Come as a guest, leave as a friend.</span>
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-sm hover:opacity-60 transition-opacity">Instagram</a>
+                        <a href="#" class="text-sm hover:opacity-60 transition-opacity">Facebook</a>
+                        <a href="#" class="text-sm hover:opacity-60 transition-opacity">Twitter</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-medium mb-4 text-sm lang-text" data-en="Shop" data-es="Tienda">
+                        <span class="lang-content show">Shop</span>
+                    </h4>
+                    <ul class="space-y-2 text-sm font-light opacity-70">
+                        <li><a href="#" class="hover:opacity-100 transition-opacity lang-text" data-en="All Coffee"
+                                data-es="Todo el Café">
+                                <span class="lang-content show">All Coffee</span>
+                            </a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity lang-text" data-en="Subscriptions"
+                                data-es="Suscripciones">
+                                <span class="lang-content show">Subscriptions</span>
+                            </a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity lang-text" data-en="Merchandise"
+                                data-es="Mercancía">
+                                <span class="lang-content show">Merchandise</span>
+                            </a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity lang-text" data-en="Equipment"
+                                data-es="Equipo">
+                                <span class="lang-content show">Equipment</span>
+                            </a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-medium mb-4 text-sm lang-text" data-en="Company" data-es="Empresa">
+                        <span class="lang-content show">Company</span>
+                    </h4>
+                    <ul class="space-y-2 text-sm font-light opacity-70">
+                        <li><a href="#" class="hover:opacity-100 transition-opacity lang-text" data-en="Our Story"
+                                data-es="Nuestra Historia">
+                                <span class="lang-content show">Our Story</span>
+                            </a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity lang-text" data-en="Wholesale"
+                                data-es="Mayoreo">
+                                <span class="lang-content show">Wholesale</span>
+                            </a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity lang-text" data-en="Careers"
+                                data-es="Carreras">
+                                <span class="lang-content show">Careers</span>
+                            </a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity lang-text" data-en="Contact"
+                                data-es="Contacto">
+                                <span class="lang-content show">Contact</span>
+                            </a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t text-center text-sm font-light opacity-50 lang-text"
+                style="border-color: rgba(26, 26, 26, 0.1);" data-en="© 2024 Artisan Coffee Lab. All rights reserved."
+                data-es="© 2024 Laboratorio de Café Artesanal. Todos los derechos reservados.">
+                <span class="lang-content show">© 2024 Artisan Coffee Lab. All rights reserved.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Language Toggle
+        let currentLanguage = 'en';
+        const toggle = document.getElementById('languageToggle');
+        const optionEn = document.getElementById('optionEn');
+        const optionEs = document.getElementById('optionEs');
+
+        function switchLanguage(lang) {
+            console.log('Switching to:', lang);
+
+            currentLanguage = lang;
+
+            if (lang === 'en') {
+                toggle.classList.remove('spanish');
+                optionEn.classList.add('active');
+                optionEn.classList.remove('inactive');
+                optionEs.classList.remove('active');
+                optionEs.classList.add('inactive');
+            } else {
+                toggle.classList.add('spanish');
+                optionEs.classList.add('active');
+                optionEs.classList.remove('inactive');
+                optionEn.classList.remove('active');
+                optionEn.classList.add('inactive');
+            }
+
+            // Update all text elements
+            const langElements = document.querySelectorAll('.lang-text');
+            console.log('Found lang elements:', langElements.length);
+
+            langElements.forEach(element => {
+                const enText = element.getAttribute('data-en');
+                const esText = element.getAttribute('data-es');
+                const contentSpan = element.querySelector('.lang-content');
+
+                if (contentSpan && enText && esText) {
+                    // Add hide class
+                    contentSpan.classList.add('hide');
+                    contentSpan.classList.remove('show');
+
+                    // After transition, update text and show
+                    setTimeout(() => {
+                        if (lang === 'en') {
+                            contentSpan.innerHTML = enText;
+                        } else {
+                            contentSpan.innerHTML = esText;
+                        }
+                        contentSpan.classList.remove('hide');
+                        contentSpan.classList.add('show');
+                    }, 150);
+                }
+            });
+        }
+
+        console.log('Setting up language toggle...');
+        console.log('Toggle element:', toggle);
+        console.log('Option EN:', optionEn);
+        console.log('Option ES:', optionEs);
+
+        // Click on EN to switch to English
+        if (optionEn) {
+            optionEn.addEventListener('click', (e) => {
+                console.log('EN clicked');
+                e.stopPropagation();
+                switchLanguage('en');
+            });
+        }
+
+        // Click on ES to switch to Spanish
+        if (optionEs) {
+            optionEs.addEventListener('click', (e) => {
+                console.log('ES clicked');
+                e.stopPropagation();
+                switchLanguage('es');
+            });
+        }
+
+        // Navbar scroll effect
+        const nav = document.getElementById('nav');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.product-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
