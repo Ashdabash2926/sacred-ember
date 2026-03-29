@@ -1,1674 +1,1078 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sacred Ember - Sauna & Wellbeing Huts</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-    <!-- GLightbox -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-    <style>
-        :root {
-            --charcoal: #0f0f0f;
-            --charcoal-light: #1a1a1a;
-            --charcoal-medium: #252525;
-            --timber: #8B6F47;
-            --timber-light: #A0826D;
-            --timber-lighter: #C19A6B;
-            --ember: #D4A574;
-            --ember-glow: #E8B67C;
-            --fire-orange: #CC7A4A;
-            --steel: #4A5568;
-            --steel-light: #6B7280;
-            --cream: #F5F1E8;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: var(--charcoal);
-            color: var(--cream);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        .serif {
-            font-family: 'Cormorant Garamond', serif;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 200;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            background: transparent;
-        }
-
-        nav.scrolled {
-            background: rgba(15, 15, 15, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(212, 165, 116, 0.1);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 4px;
-            background: none;
-            border: none;
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: var(--cream);
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .mobile-menu-btn.open span:nth-child(2) { opacity: 0; }
-        .mobile-menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        .mobile-nav {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(15, 15, 15, 0.98);
-            backdrop-filter: blur(20px);
-            z-index: 199;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3rem;
-        }
-
-        .mobile-nav.open { display: flex; }
-
-        .mobile-nav a {
-            font-size: 1.4rem;
-            letter-spacing: 0.25em;
-            color: var(--cream);
-            text-decoration: none;
-            transition: color 0.3s;
-            text-transform: uppercase;
-        }
-
-        .mobile-nav a:hover { color: var(--ember-glow); }
-
-        @media (max-width: 768px) {
-            .mobile-menu-btn { display: flex; }
-        }
-
-        /* Ember Particles Background */
-        .ember-particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: radial-gradient(circle, var(--ember-glow), transparent);
-            border-radius: 50%;
-            opacity: 0;
-            animation: float-ember 15s infinite ease-in-out;
-        }
-
-        @keyframes float-ember {
-            0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.3; }
-            100% { transform: translateY(-10vh) translateX(50px) scale(1); opacity: 0; }
-        }
-
-        /* Hero Section */
-        .hero {
-            position: relative;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background: linear-gradient(135deg, var(--charcoal) 0%, #1a1410 100%);
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('images/sauna/pexels-huum-sauna-heaters-718199222-31092895.jpg') center/cover;
-            opacity: 0.45;
-            animation: subtle-zoom 28s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 50%, rgba(212, 165, 116, 0.15) 0%, transparent 50%),
-                linear-gradient(to bottom, rgba(15, 15, 15, 0.3) 0%, rgba(15, 15, 15, 0.9) 100%);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            max-width: 900px;
-            padding: 2rem;
-            opacity: 0;
-            animation: fade-rise 1.2s ease-out 0.3s forwards;
-        }
-
-        .ember-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 2rem;
-            opacity: 0;
-            animation: glow-pulse 3s ease-in-out infinite, fade-rise 1s ease-out forwards;
-        }
-
-        .hero-title {
-            font-size: 6.5rem;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--cream) 0%, var(--ember-glow) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-tagline {
-            font-size: 1.5rem;
-            letter-spacing: 0.25em;
-            font-weight: 300;
-            color: var(--timber-lighter);
-            margin-bottom: 3rem;
-            text-transform: uppercase;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1.2rem 3.5rem;
-            background: linear-gradient(135deg, var(--timber) 0%, var(--fire-orange) 100%);
-            color: var(--cream);
-            text-decoration: none;
-            letter-spacing: 0.2em;
-            font-weight: 500;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid var(--ember);
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s;
-        }
-
-        .cta-button:hover::before { left: 100%; }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(212, 165, 116, 0.3);
-        }
-
-        /* Section Styles */
-        .section {
-            padding: 8rem 2rem;
-            position: relative;
-        }
-
-        .section-dark { background: var(--charcoal-light); }
-        .section-darker { background: var(--charcoal); }
-
-        .section-header {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 5rem;
-        }
-
-        .section-title {
-            font-size: 4.5rem;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            margin-bottom: 1.5rem;
-            color: var(--cream);
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .section-title.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section-subtitle {
-            font-size: 1rem;
-            color: var(--timber-lighter);
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            font-weight: 400;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
-        }
-
-        .section-subtitle.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Process Section */
-        .process-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            max-width: 1100px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .process-grid::before {
-            content: '';
-            position: absolute;
-            top: 2.5rem;
-            left: calc(16.66% + 1rem);
-            right: calc(16.66% + 1rem);
-            height: 1px;
-            background: linear-gradient(to right, var(--timber), var(--fire-orange), var(--timber));
-            opacity: 0.4;
-        }
-
-        .process-step {
-            text-align: center;
-            padding: 2rem 1.5rem;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .process-step.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .process-number {
-            width: 5rem;
-            height: 5rem;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--timber) 0%, var(--fire-orange) 100%);
-            border: 1px solid var(--ember);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 2rem;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            font-weight: 300;
-            color: var(--cream);
-        }
-
-        .process-title {
-            font-size: 1.4rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-            color: var(--ember-glow);
-        }
-
-        .process-description {
-            font-size: 0.9rem;
-            line-height: 1.8;
-            color: rgba(245, 241, 232, 0.7);
-        }
-
-        /* About Section */
-        .about-split {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            align-items: center;
-        }
-
-        .about-image-wrap {
-            position: relative;
-            opacity: 0;
-            transform: translateX(-30px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .about-image-wrap.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .about-image-wrap img {
-            width: 100%;
-            aspect-ratio: 3/4;
-            object-fit: cover;
-        }
-
-        .about-image-accent {
-            position: absolute;
-            top: -1.5rem;
-            left: -1.5rem;
-            width: 100%;
-            height: 100%;
-            border: 1px solid rgba(212, 165, 116, 0.25);
-            pointer-events: none;
-        }
-
-        .about-text {
-            opacity: 0;
-            transform: translateX(30px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
-        }
-
-        .about-text.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .about-overline {
-            font-size: 0.8rem;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            color: var(--timber-lighter);
-            margin-bottom: 1.5rem;
-        }
-
-        .about-heading {
-            font-size: 3.5rem;
-            font-weight: 400;
-            line-height: 1.15;
-            margin-bottom: 2rem;
-            color: var(--cream);
-        }
-
-        .about-body {
-            font-size: 0.95rem;
-            line-height: 2;
-            color: rgba(245, 241, 232, 0.75);
-            margin-bottom: 1.5rem;
-        }
-
-        .about-quote {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            font-style: italic;
-            color: var(--ember-glow);
-            border-left: 2px solid var(--ember);
-            padding-left: 1.5rem;
-            margin: 2rem 0;
-            line-height: 1.6;
-        }
-
-        /* Product Cards */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .product-card {
-            background: var(--charcoal-medium);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(139, 111, 71, 0.2);
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .product-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .product-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.08) 0%, transparent 100%);
-            opacity: 0;
-            transition: opacity 0.4s;
-            z-index: 1;
-        }
-
-        .product-card:hover::before { opacity: 1; }
-
-        .product-card:hover {
-            border-color: var(--ember);
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .product-card:hover .product-image { transform: scale(1.05); }
-
-        .product-content {
-            padding: 2.5rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .product-title {
-            font-size: 2rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-            margin-bottom: 1rem;
-            color: var(--ember-glow);
-        }
-
-        .product-description {
-            font-size: 0.95rem;
-            line-height: 1.8;
-            color: rgba(245, 241, 232, 0.8);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Philosophy Section */
-        .philosophy-content {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .philosophy-text {
-            font-size: 1.3rem;
-            line-height: 2;
-            color: var(--timber-lighter);
-            margin-bottom: 2rem;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .philosophy-text.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-top: 5rem;
-        }
-
-        .value-item {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .value-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .value-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--timber) 0%, var(--fire-orange) 100%);
-            border-radius: 50%;
-            font-size: 1.8rem;
-        }
-
-        .value-title {
-            font-size: 1.5rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-            color: var(--ember-glow);
-        }
-
-        .value-description {
-            font-size: 0.9rem;
-            line-height: 1.8;
-            color: rgba(245, 241, 232, 0.7);
-        }
-
-        /* Gallery */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .gallery-item {
-            position: relative;
-            aspect-ratio: 1;
-            overflow: hidden;
-            background: var(--charcoal-medium);
-            opacity: 0;
-            transform: scale(0.95);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-
-        .gallery-item.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .gallery-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(139, 111, 71, 0.6) 0%, rgba(204, 122, 74, 0.6) 100%);
-            opacity: 0;
-            transition: opacity 0.4s;
-            z-index: 1;
-        }
-
-        .gallery-zoom {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            z-index: 2;
-            opacity: 0;
-            transition: all 0.4s;
-            color: var(--cream);
-        }
-
-        .gallery-item:hover::before { opacity: 1; }
-        .gallery-item:hover img { transform: scale(1.1); }
-        .gallery-item:hover .gallery-zoom { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-
-        /* Testimonials */
-        .testimonial-card {
-            background: var(--charcoal-medium);
-            padding: 3rem;
-            border-left: 3px solid var(--ember);
-            max-width: 800px;
-            margin: 0 auto 3rem;
-            position: relative;
-            opacity: 0;
-            transform: translateX(-30px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .testimonial-card.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .testimonial-quote {
-            font-size: 1.2rem;
-            line-height: 1.9;
-            color: var(--cream);
-            margin-bottom: 2rem;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            font-size: 1rem;
-            color: var(--timber-lighter);
-            font-weight: 500;
-            letter-spacing: 0.1em;
-        }
-
-        /* FAQ Section */
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            border-bottom: 1px solid rgba(139, 111, 71, 0.2);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .faq-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .faq-question {
-            width: 100%;
-            background: none;
-            border: none;
-            color: var(--cream);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            text-align: left;
-            padding: 1.8rem 0;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-            transition: color 0.3s;
-        }
-
-        .faq-question:hover { color: var(--ember-glow); }
-
-        .faq-icon {
-            width: 24px;
-            height: 24px;
-            flex-shrink: 0;
-            border: 1px solid var(--timber-lighter);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s;
-            color: var(--timber-lighter);
-            font-size: 1.1rem;
-            line-height: 1;
-        }
-
-        .faq-item.open .faq-icon {
-            background: var(--ember);
-            border-color: var(--ember);
-            color: var(--charcoal);
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .faq-item.open .faq-answer { max-height: 300px; }
-
-        .faq-answer-inner {
-            padding-bottom: 1.8rem;
-            font-size: 0.95rem;
-            line-height: 1.9;
-            color: rgba(245, 241, 232, 0.75);
-        }
-
-        /* Contact Form */
-        .contact-container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .form-group { margin-bottom: 1.5rem; }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.85rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--timber-lighter);
-            font-weight: 500;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            background: rgba(37, 37, 37, 0.6);
-            border: 1px solid rgba(139, 111, 71, 0.3);
-            color: var(--cream);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-
-        input::placeholder, textarea::placeholder {
-            color: rgba(245, 241, 232, 0.4);
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--ember);
-            background: rgba(37, 37, 37, 0.9);
-            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 150px;
-        }
-
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23C19A6B' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1.5rem center;
-            padding-right: 3rem;
-            background-color: rgba(37, 37, 37, 0.6);
-        }
-
-        select option { background: var(--charcoal-medium); }
-
-        .submit-button {
-            width: 100%;
-            padding: 1.3rem;
-            background: linear-gradient(135deg, var(--timber) 0%, var(--fire-orange) 100%);
-            color: var(--cream);
-            border: 1px solid var(--ember);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .submit-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s;
-        }
-
-        .submit-button:hover::before { left: 100%; }
-
-        .submit-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--charcoal);
-            border-top: 1px solid rgba(139, 111, 71, 0.2);
-            padding: 5rem 2rem 2rem;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 4rem;
-            margin-bottom: 4rem;
-        }
-
-        .footer-section h3 {
-            font-size: 1.2rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            margin-bottom: 1.5rem;
-            color: var(--ember-glow);
-        }
-
-        .footer-section p, .footer-section a {
-            font-size: 0.9rem;
-            line-height: 1.8;
-            color: rgba(245, 241, 232, 0.7);
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover { color: var(--ember-glow); }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(139, 111, 71, 0.1);
-            color: rgba(245, 241, 232, 0.5);
-            font-size: 0.85rem;
-        }
-
-        /* Animations */
-        @keyframes fade-rise {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes subtle-zoom {
-            0%   { transform: scale(1.45) translateX(-8%); }
-            100% { transform: scale(1.05) translateX(8%); }
-        }
-
-        /* Parallax wrapper — taller than hero to give scroll room */
-        .hero-parallax-wrapper {
-            position: absolute;
-            top: -15%;
-            left: 0;
-            width: 100%;
-            height: 130%;
-            will-change: transform;
-        }
-
-        @keyframes glow-pulse {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(212, 165, 116, 0.6)); }
-            50% { filter: drop-shadow(0 0 30px rgba(232, 182, 124, 0.8)); }
-        }
-
-        /* Scroll Indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            opacity: 0;
-            animation: fade-rise 1s ease-out 1s forwards;
-        }
-
-        .scroll-text {
-            font-size: 0.7rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--timber-lighter);
-            margin-bottom: 1rem;
-        }
-
-        .scroll-line {
-            width: 2px;
-            height: 50px;
-            background: linear-gradient(to bottom, var(--ember), transparent);
-            margin: 0 auto;
-            animation: scroll-float 2s ease-in-out infinite;
-        }
-
-        @keyframes scroll-float {
-            0%, 100% { transform: translateY(0); opacity: 1; }
-            50% { transform: translateY(10px); opacity: 0.5; }
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .hero-title { font-size: 4.5rem; }
-            .section-title { font-size: 3.5rem; }
-            .about-split { grid-template-columns: 1fr; gap: 3rem; }
-            .about-image-wrap { max-width: 500px; }
-            .about-text { transform: translateX(0); }
-            .about-image-wrap { transform: translateX(0); }
-        }
-
-        @media (max-width: 768px) {
-            .hero-title { font-size: 3rem; }
-            .hero-tagline { font-size: 1.1rem; }
-            .section { padding: 5rem 1.5rem; }
-            .section-title { font-size: 2.5rem; }
-            .about-heading { font-size: 2.5rem; }
-            .form-row { grid-template-columns: 1fr; }
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-            .process-grid { grid-template-columns: 1fr; }
-            .process-grid::before { display: none; }
-            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title { font-size: 2.2rem; }
-            .section-title { font-size: 2rem; }
-            .product-grid { grid-template-columns: 1fr; }
-            .gallery-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sacred Ember — Bespoke Saunas &amp; Wellbeing Huts, Yorkshire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Barlow+Condensed:wght@300;400;500;600;700&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+  <style>
+    :root {
+      --char:        #11100e;
+      --surface:     #191510;
+      --surface2:    #1e1a12;
+      --forest:      #141d18;
+      --ember:       #c47a3e;
+      --flame:       #dfa060;
+      --gold:        #b8692a;
+      --parch:       #f0e7d5;
+      --parch-dim:   rgba(240,231,213,0.64);
+      --parch-faint: rgba(240,231,213,0.28);
+      --parch-ghost: rgba(240,231,213,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--char);
+      color: var(--parch);
+      font-family: 'Mulish', sans-serif;
+      font-weight: 300;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* Film grain */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      z-index: 998; pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 160px;
+    }
+
+    /* ── ANIMATIONS ─────────────────────────── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+    @keyframes slowDrift {
+      0%,100% { transform: scale(1.06) translateX(0) translateY(0); }
+      33%      { transform: scale(1.09) translateX(-1%) translateY(-0.5%); }
+      66%      { transform: scale(1.07) translateX(0.8%) translateY(0.5%); }
+    }
+    @keyframes burnPulse {
+      0%,100% { opacity: 0.18; }
+      50%      { opacity: 0.28; }
+    }
+    @keyframes lineGrow {
+      from { width: 0; }
+      to   { width: 48px; }
+    }
+
+    /* ── REVEAL ─────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .rd1 { transition-delay: 0.08s; }
+    .rd2 { transition-delay: 0.18s; }
+    .rd3 { transition-delay: 0.28s; }
+    .rd4 { transition-delay: 0.38s; }
+
+    /* ── NAV ────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%;
+      z-index: 500; padding: 1.75rem 2.5rem;
+      transition: background 0.5s, padding 0.4s, border-color 0.5s;
+    }
+    nav.scrolled {
+      background: rgba(17,16,14,0.92);
+      backdrop-filter: blur(20px);
+      padding: 1rem 2.5rem;
+      border-bottom: 1px solid rgba(196,122,62,0.1);
+    }
+    .nav-inner {
+      max-width: 1440px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: 1.2rem; font-weight: 400;
+      color: var(--parch); text-decoration: none; letter-spacing: 0.01em;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2.5rem; }
+    .nav-links a {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 500;
+      font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--parch-dim); text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--flame); }
+    .nav-cta {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+      font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--char); background: var(--ember);
+      padding: 0.65rem 1.5rem; text-decoration: none; transition: background 0.25s;
+    }
+    .nav-cta:hover { background: var(--flame); }
+
+    /* ── HAMBURGER ──────────────────────────── */
+    .hamburger {
+      background: none; border: none; cursor: pointer;
+      padding: 4px; display: none; flex-direction: column; gap: 5px;
+    }
+    .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--parch); transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .nav-links, .nav-cta { display: none !important; }
+    }
+
+    /* ── MOBILE NAV ─────────────────────────── */
+    .mobile-nav {
+      display: none; position: fixed; inset: 0;
+      background: rgba(17,16,14,0.97); backdrop-filter: blur(24px);
+      z-index: 490; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2.75rem;
+    }
+    .mobile-nav.open { display: flex; animation: fadeIn 0.3s ease; }
+    .mobile-nav a {
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: 2.25rem; font-weight: 400;
+      color: var(--parch); text-decoration: none; transition: color 0.3s;
+    }
+    .mobile-nav a:hover { color: var(--flame); }
+
+    /* ── HERO ───────────────────────────────── */
+    .hero-wrap {
+      height: 100vh; display: grid;
+      grid-template-columns: 60% 40%;
+      position: relative; overflow: hidden;
+    }
+
+    /* Left photo panel */
+    .hero-left { position: relative; overflow: hidden; }
+    .hero-left-bg {
+      position: absolute; inset: 0;
+      background-image: url('saunaimages/sauna.jpg');
+      background-size: cover; background-position: center;
+      animation: slowDrift 32s ease-in-out infinite;
+    }
+    .hero-left-overlay {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 0% 100%, rgba(196,122,62,0.18) 0%, transparent 60%),
+        linear-gradient(160deg, rgba(17,16,14,0.42) 0%, rgba(17,16,14,0.08) 45%, rgba(17,16,14,0.72) 100%);
+    }
+    .hero-left-content {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 4rem 3.5rem 5rem; z-index: 10;
+    }
+    .hero-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 500;
+      font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--flame); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
+      animation: fadeIn 1s ease 0.3s both;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block; width: 0; height: 1px; background: var(--ember);
+      animation: lineGrow 0.7s ease 0.8s both;
+    }
+    .hero-tagline {
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: clamp(2rem, 3.8vw, 3.4rem); font-weight: 400;
+      color: var(--parch); line-height: 1.18; max-width: 460px;
+      margin-bottom: 2.75rem;
+      animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.5s both;
+    }
+    .hero-cta {
+      display: inline-block; align-self: flex-start;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--char); background: var(--ember);
+      padding: 1.05rem 2.5rem; text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
+      animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.7s both;
+    }
+    .hero-cta:hover { background: var(--flame); transform: translateY(-2px); }
+
+    /* Right forest panel */
+    .hero-right {
+      background: var(--forest);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2rem; padding: 2rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-right::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 100% 80% at 50% 100%, rgba(196,122,62,0.08) 0%, transparent 65%);
+      animation: burnPulse 6s ease-in-out infinite;
+    }
+    .hero-ritual-text {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 300;
+      font-size: 0.6rem; letter-spacing: 0.42em; text-transform: uppercase;
+      color: rgba(240,231,213,0.35); z-index: 2;
+      animation: fadeIn 1.4s ease 0.9s both;
+    }
+    .hero-circle {
+      width: 74%; aspect-ratio: 1/1; border-radius: 50%;
+      overflow: hidden; z-index: 2;
+      box-shadow: 0 0 0 1px rgba(196,122,62,0.2), 0 0 60px rgba(196,122,62,0.06);
+      animation: fadeIn 1.2s ease 0.6s both;
+    }
+    .hero-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-circle-caption {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 400;
+      font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(240,231,213,0.3); z-index: 2;
+      animation: fadeIn 1.4s ease 1s both;
+    }
+
+    /* Wordmark */
+    .hero-wordmark {
+      position: absolute; bottom: -0.15em; left: 0; right: 0;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: clamp(5.5rem, 13vw, 17rem);
+      line-height: 1; letter-spacing: -0.01em;
+      color: rgba(240,231,213,0.045);
+      text-align: center; pointer-events: none; user-select: none;
+      z-index: 5; white-space: nowrap;
+      animation: fadeIn 2.5s ease 1s both;
+    }
+
+    /* Scroll arrow */
+    .hero-scroll {
+      position: absolute; bottom: 2.25rem; left: 50%; transform: translateX(-50%);
+      z-index: 20; width: 38px; height: 38px;
+      border: 1px solid rgba(196,122,62,0.35); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ember); text-decoration: none;
+      animation: fadeIn 1.5s ease 1.4s both; transition: border-color 0.25s, background 0.25s;
+    }
+    .hero-scroll:hover { border-color: var(--ember); background: rgba(196,122,62,0.08); }
+
+    /* ── CREDENTIALS STRIP ──────────────────── */
+    .cred-strip {
+      background: var(--surface);
+      border-top: 1px solid rgba(196,122,62,0.1);
+      border-bottom: 1px solid rgba(196,122,62,0.1);
+      padding: 1.1rem 2.5rem;
+      overflow: hidden;
+    }
+    .cred-inner {
+      max-width: 1440px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; flex-wrap: wrap;
+    }
+    .cred-item {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 400;
+      font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--parch-dim); padding: 0 2.5rem;
+      border-right: 1px solid rgba(196,122,62,0.18);
+    }
+    .cred-item:last-child { border-right: none; }
+    .cred-item strong { color: var(--flame); font-weight: 600; }
+
+    /* ── LAYOUT ─────────────────────────────── */
+    .section { padding: 8rem 2.5rem; position: relative; }
+    .inner   { max-width: 1360px; margin: 0 auto; }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 500;
+      font-size: 0.62rem; letter-spacing: 0.34em; text-transform: uppercase;
+      color: var(--ember); display: flex; align-items: center; gap: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block; width: 28px; height: 1px; background: var(--ember);
+      flex-shrink: 0;
+    }
+    .section-h2 {
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: clamp(2.4rem, 4.2vw, 4rem); font-weight: 400;
+      color: var(--parch); line-height: 1.08;
+    }
+    .section-h2 span { font-style: normal; }
+    .ember-line { width: 0; height: 1px; background: var(--ember); margin: 1.5rem 0; }
+    .ember-line.animate { animation: lineGrow 0.8s ease 0.3s both; animation-fill-mode: forwards; width: 48px; }
+
+    /* ── ABOUT ──────────────────────────────── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7rem; align-items: center; }
+    .about-img-wrap { position: relative; }
+    .about-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 2rem -2rem -2rem 2rem;
+      border: 1px solid rgba(196,122,62,0.18);
+      pointer-events: none; z-index: 0;
+    }
+    .about-img-wrap img {
+      position: relative; z-index: 1;
+      width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block;
+    }
+    .about-body {
+      font-size: 0.92rem; color: var(--parch-dim); line-height: 1.95;
+      margin-bottom: 1.25rem;
+    }
+    .about-quote {
+      border-left: 2px solid var(--ember); padding-left: 1.75rem;
+      margin: 2.25rem 0;
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: 1.08rem; font-weight: 300;
+      color: var(--parch-dim); line-height: 1.75;
+    }
+
+    /* ── PHILOSOPHY ─────────────────────────── */
+    .philosophy-quote {
+      font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+      font-size: clamp(1.3rem, 2.4vw, 2rem);
+      color: var(--parch-dim); line-height: 1.7;
+      max-width: 880px; margin: 0 auto 5.5rem;
+      padding-left: 2.5rem;
+      border-left: 2px solid var(--ember);
+    }
+    .values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+    .value-card {
+      background: var(--parch-ghost);
+      border: 1px solid rgba(196,122,62,0.1);
+      padding: 3.5rem 2.75rem;
+      position: relative; overflow: hidden;
+      transition: background 0.35s, border-color 0.35s;
+    }
+    .value-card::before {
+      content: attr(data-n);
+      position: absolute; top: -1rem; right: 1.5rem;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 8rem; line-height: 1;
+      color: rgba(196,122,62,0.07); pointer-events: none;
+      transition: color 0.35s;
+    }
+    .value-card:hover { background: rgba(196,122,62,0.04); border-color: rgba(196,122,62,0.26); }
+    .value-card:hover::before { color: rgba(196,122,62,0.12); }
+    .value-title {
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: 1.55rem; font-weight: 400;
+      color: var(--parch); margin-bottom: 1rem; position: relative; z-index: 1;
+    }
+    .value-body { font-size: 0.88rem; color: var(--parch-dim); line-height: 1.9; position: relative; z-index: 1; }
+
+    /* ── PROCESS ────────────────────────────── */
+    .process-grid { display: grid; grid-template-columns: repeat(3,1fr); }
+    .process-step {
+      padding: 4rem 3rem;
+      border: 1px solid rgba(196,122,62,0.1);
+      border-right: none; position: relative; overflow: hidden;
+      transition: background 0.35s;
+    }
+    .process-step:last-child { border-right: 1px solid rgba(196,122,62,0.1); }
+    .process-step:hover { background: rgba(196,122,62,0.035); }
+    .process-num {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 11rem; line-height: 0.85;
+      color: rgba(196,122,62,0.09);
+      position: absolute; top: 1rem; right: -0.5rem;
+      pointer-events: none; letter-spacing: -0.04em;
+      transition: color 0.35s;
+    }
+    .process-step:hover .process-num { color: rgba(196,122,62,0.15); }
+    .process-tag {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 500;
+      font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 1.25rem; display: block;
+    }
+    .process-title {
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: 1.55rem; font-weight: 400;
+      color: var(--parch); margin-bottom: 1.1rem; position: relative; z-index: 1;
+    }
+    .process-body { font-size: 0.88rem; color: var(--parch-dim); line-height: 1.9; position: relative; z-index: 1; }
+
+    /* ── OFFERINGS ──────────────────────────── */
+    .offerings-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; }
+    .offering-card { position: relative; overflow: hidden; aspect-ratio: 3/4; background: var(--surface); }
+    .offering-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .offering-card:hover img { transform: scale(1.07); }
+    .offering-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(17,16,14,0.96) 0%, rgba(17,16,14,0.22) 55%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 2.5rem 2.25rem;
+    }
+    .offering-num {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 0.6rem;
+    }
+    .offering-title {
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: 1.8rem; font-weight: 400;
+      color: var(--parch); line-height: 1.1; margin-bottom: 0.8rem;
+    }
+    .offering-desc {
+      font-size: 0.82rem; color: var(--parch-dim); line-height: 1.8;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease;
+      opacity: 0;
+    }
+    .offering-card:hover .offering-desc { max-height: 130px; opacity: 1; }
+
+    /* ── GALLERY ────────────────────────────── */
+    .gallery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; }
+    .gallery-item {
+      position: relative; overflow: hidden; display: block;
+      aspect-ratio: 4/3; background: var(--surface);
+    }
+    .gallery-item:first-child { grid-column: span 2; aspect-ratio: 16/9; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .gallery-item:hover img { transform: scale(1.07); }
+    .gallery-zoom {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(17,16,14,0); color: var(--parch);
+      opacity: 0; transition: background 0.35s, opacity 0.35s;
+    }
+    .gallery-item:hover .gallery-zoom { background: rgba(17,16,14,0.42); opacity: 1; }
+
+    /* ── TESTIMONIALS ───────────────────────── */
+    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; }
+    .testi-card {
+      background: var(--parch-ghost);
+      border: 1px solid rgba(196,122,62,0.1);
+      padding: 3.25rem 2.5rem;
+      transition: background 0.35s, border-color 0.35s;
+    }
+    .testi-card:hover { background: rgba(196,122,62,0.04); border-color: rgba(196,122,62,0.28); }
+    .testi-mark {
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: 5rem; line-height: 0.75;
+      color: var(--ember); opacity: 0.22;
+      display: block; margin-bottom: 0.5rem;
+    }
+    .testi-text {
+      font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+      font-size: 1.02rem; color: var(--parch-dim); line-height: 1.85;
+      margin-bottom: 1.75rem;
+    }
+    .testi-author {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 500;
+      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--flame);
+    }
+
+    /* ── FAQ ────────────────────────────────── */
+    .faq-wrap { max-width: 820px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid rgba(196,122,62,0.1); }
+    .faq-q {
+      width: 100%; background: none; border: none; color: var(--parch);
+      font-family: 'Mulish', sans-serif; font-weight: 400; font-size: 0.93rem;
+      text-align: left; padding: 1.85rem 0; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+      transition: color 0.25s;
+    }
+    .faq-q:hover { color: var(--flame); }
+    .faq-icon {
+      width: 28px; height: 28px; flex-shrink: 0;
+      border: 1px solid rgba(196,122,62,0.4); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ember); font-size: 1rem; line-height: 1; transition: all 0.35s;
+    }
+    .faq-item.open .faq-icon { background: var(--ember); border-color: var(--ember); color: var(--char); transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1); }
+    .faq-item.open .faq-answer { max-height: 300px; }
+    .faq-answer-inner { padding-bottom: 1.85rem; font-size: 0.9rem; color: var(--parch-dim); line-height: 1.95; }
+
+    /* ── CONTACT ────────────────────────────── */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.65fr; gap: 7rem; align-items: start; }
+    .contact-detail-label {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 500;
+      font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 0.4rem; display: block;
+    }
+    .contact-detail-value {
+      color: var(--parch-dim); font-size: 1rem; text-decoration: none;
+      transition: color 0.2s;
+    }
+    a.contact-detail-value:hover { color: var(--flame); }
+    .form-label {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 500;
+      font-size: 0.58rem; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 0.5rem;
+    }
+    .form-field {
+      width: 100%; padding: 0.95rem 1.15rem;
+      background: rgba(240,231,213,0.04); border: 1px solid rgba(196,122,62,0.16);
+      color: var(--parch); font-family: 'Mulish', sans-serif; font-weight: 300; font-size: 0.9rem;
+      transition: border-color 0.25s, background 0.25s; outline: none;
+    }
+    .form-field:focus { border-color: var(--ember); background: rgba(240,231,213,0.07); }
+    .form-field::placeholder { color: rgba(240,231,213,0.2); }
+    textarea.form-field { min-height: 140px; resize: vertical; }
+    select.form-field {
+      cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23c47a3e' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 1rem center;
+      background-color: rgba(240,231,213,0.04); padding-right: 2.5rem;
+    }
+    select.form-field option { background: #191510; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .form-group { margin-bottom: 1.5rem; }
+    .btn-submit {
+      width: 100%; padding: 1.2rem;
+      background: var(--ember); border: none;
+      color: var(--char); font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 0.75rem; letter-spacing: 0.24em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.25s, transform 0.2s;
+    }
+    .btn-submit:hover { background: var(--flame); transform: translateY(-1px); }
+
+    /* ── FOOTER ─────────────────────────────── */
+    footer {
+      background: var(--char);
+      border-top: 1px solid rgba(196,122,62,0.1);
+      padding: 6rem 2.5rem 2.75rem;
+      position: relative; overflow: hidden;
+    }
+    footer::before {
+      content: 'Sacred Ember';
+      position: absolute; bottom: -0.2em; left: 50%; transform: translateX(-50%);
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: clamp(4rem, 10vw, 12rem); font-weight: 700;
+      color: rgba(240,231,213,0.025);
+      white-space: nowrap; pointer-events: none; user-select: none;
+    }
+    .footer-grid {
+      max-width: 1360px; margin: 0 auto 4.5rem;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;
+      position: relative; z-index: 1;
+    }
+    .footer-brand {
+      font-family: 'Fraunces', serif; font-style: italic;
+      font-size: 1.6rem; font-weight: 400;
+      color: var(--parch); margin-bottom: 1rem;
+    }
+    .footer-tagline { font-size: 0.87rem; color: var(--parch-faint); line-height: 1.85; max-width: 260px; }
+    .footer-heading {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+      font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 1.35rem;
+    }
+    .footer-link {
+      display: block; font-size: 0.87rem; color: var(--parch-dim);
+      text-decoration: none; padding: 0.3rem 0; transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--flame); }
+    .footer-bottom {
+      max-width: 1360px; margin: 0 auto;
+      border-top: 1px solid rgba(196,122,62,0.08);
+      padding-top: 1.75rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 400;
+      font-size: 0.65rem; letter-spacing: 0.12em;
+      color: var(--parch-faint); flex-wrap: wrap; gap: 1rem;
+      position: relative; z-index: 1;
+    }
+
+    /* ── BTN ────────────────────────────────── */
+    .btn {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 1.05rem 2.4rem; text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .btn-ember { background: var(--ember); color: var(--char); }
+    .btn-ember:hover { background: var(--flame); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--parch-dim);
+      border: 1px solid rgba(196,122,62,0.35);
+    }
+    .btn-ghost:hover { border-color: var(--ember); color: var(--parch); }
+
+    /* ── DIAMOND DIVIDER ────────────────────── */
+    .diamond-divider {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.5rem; padding: 0; margin-bottom: 1.5rem;
+    }
+    .diamond-divider::before,
+    .diamond-divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(196,122,62,0.2));
+    }
+    .diamond-divider::after {
+      background: linear-gradient(to left, transparent, rgba(196,122,62,0.2));
+    }
+    .diamond-divider span {
+      width: 5px; height: 5px;
+      background: var(--ember);
+      transform: rotate(45deg); flex-shrink: 0;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 1100px) {
+      .hero-wrap { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left-content { justify-content: flex-end; padding: 3rem 2.5rem 5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 4rem; }
+      .about-img-wrap::after { display: none; }
+      .values-grid { grid-template-columns: 1fr; gap: 2px; }
+      .process-grid { grid-template-columns: 1fr; }
+      .process-step { border-right: 1px solid rgba(196,122,62,0.1); border-bottom: none; }
+      .process-step + .process-step { border-top: none; }
+      .offerings-grid { grid-template-columns: 1fr 1fr; }
+      .testi-grid { grid-template-columns: 1fr; gap: 2px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3.5rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 3rem; }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 5.5rem 1.5rem; }
+      nav { padding: 1.5rem 1.5rem; }
+      nav.scrolled { padding: 0.9rem 1.5rem; }
+      .hero-wordmark { font-size: clamp(4.5rem, 24vw, 12rem); }
+      .cred-inner { gap: 0; }
+      .cred-item { padding: 0.5rem 1rem; font-size: 0.58rem; }
+      .offerings-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:first-child { grid-column: span 2; }
+      .form-row { grid-template-columns: 1fr; }
+      .process-num { font-size: 7rem; }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item:first-child { grid-column: span 1; aspect-ratio: 4/3; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .cred-strip { display: none; }
+    }
+  </style>
 </head>
-
 <body>
 
-    <!-- Floating Ember Particles -->
-    <div id="ember-container"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></div>
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#about"     onclick="closeMobileNav()">About</a>
+    <a href="#process"   onclick="closeMobileNav()">Process</a>
+    <a href="#offerings" onclick="closeMobileNav()">Offerings</a>
+    <a href="#gallery"   onclick="closeMobileNav()">Gallery</a>
+    <a href="#faq"       onclick="closeMobileNav()">FAQ</a>
+    <a href="#contact"   onclick="closeMobileNav()">Get in Touch</a>
+  </div>
 
-    <!-- Mobile Nav Overlay -->
-    <div class="mobile-nav" id="mobileNav">
-        <a href="#about" onclick="closeMobileNav()">About</a>
-        <a href="#process" onclick="closeMobileNav()">Process</a>
-        <a href="#offerings" onclick="closeMobileNav()">Offerings</a>
-        <a href="#gallery" onclick="closeMobileNav()">Gallery</a>
-        <a href="#faq" onclick="closeMobileNav()">FAQ</a>
-        <a href="#contact" onclick="closeMobileNav()">Contact</a>
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Sacred Ember</a>
+      <div class="nav-links hidden md:flex items-center gap-10">
+        <a href="#about">About</a>
+        <a href="#process">Process</a>
+        <a href="#offerings">Offerings</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <a href="#contact" class="nav-cta hidden md:inline-block">Get in Touch</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMobileNav()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section style="padding:0; position:relative; height:100vh; overflow:hidden;">
+    <div class="hero-wrap">
+
+      <!-- Left: photo panel -->
+      <div class="hero-left">
+        <div class="hero-left-bg"></div>
+        <div class="hero-left-overlay"></div>
+        <div class="hero-left-content">
+          <div class="hero-eyebrow">Bespoke Saunas &amp; Wellbeing Huts</div>
+          <p class="hero-tagline">Ignite your inner fire.<br />Crafted with heart<br />and soul in Yorkshire.</p>
+          <a href="#offerings" class="hero-cta">Explore Our Craft</a>
+        </div>
+      </div>
+
+      <!-- Right: forest panel -->
+      <div class="hero-right">
+        <span class="hero-ritual-text">The Ritual of Heat</span>
+        <div class="hero-circle">
+          <img src="saunaimages/sauna3.png" alt="Sacred Ember sauna interior">
+        </div>
+        <span class="hero-circle-caption">Yorkshire &nbsp;·&nbsp; Handcrafted</span>
+      </div>
+
     </div>
 
-    <!-- Navigation -->
-    <nav id="navbar" class="py-6 px-8">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="serif text-3xl font-light tracking-wide">Sacred Ember</div>
-            <div class="hidden md:flex space-x-8 text-xs tracking-widest">
-                <a href="#about" class="hover:text-[var(--ember-glow)] transition-colors">ABOUT</a>
-                <a href="#process" class="hover:text-[var(--ember-glow)] transition-colors">PROCESS</a>
-                <a href="#offerings" class="hover:text-[var(--ember-glow)] transition-colors">OFFERINGS</a>
-                <a href="#gallery" class="hover:text-[var(--ember-glow)] transition-colors">GALLERY</a>
-                <a href="#faq" class="hover:text-[var(--ember-glow)] transition-colors">FAQ</a>
-                <a href="#contact" class="hover:text-[var(--ember-glow)] transition-colors">CONTACT</a>
-            </div>
-            <button class="mobile-menu-btn" id="menuBtn" onclick="toggleMobileNav()" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+    <!-- Wordmark overlay -->
+    <div class="hero-wordmark">SACRED EMBER</div>
+
+    <!-- Scroll arrow -->
+    <a href="#about" class="hero-scroll">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </a>
+  </section>
+
+  <!-- CREDENTIALS STRIP -->
+  <div class="cred-strip">
+    <div class="cred-inner">
+      <div class="cred-item"><strong>Bespoke</strong> every build</div>
+      <div class="cred-item"><strong>Yorkshire</strong> based</div>
+      <div class="cred-item"><strong>Wood-fired</strong> tradition</div>
+      <div class="cred-item"><strong>Scandinavian</strong> craft</div>
+      <div class="cred-item"><a href="tel:07707116419" style="color:inherit;text-decoration:none;"><strong>07707</strong> 116419</a></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about" class="section" style="background:var(--surface);">
+    <div class="inner">
+      <div class="about-grid">
+        <div class="about-img-wrap reveal">
+          <img src="saunaimages/sauna3.png" alt="Sacred Ember craftsmanship">
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-parallax-wrapper">
-            <div class="hero-bg"></div>
+        <div class="reveal rd2">
+          <div class="section-label">The Maker</div>
+          <h2 class="section-h2">Built with heart.<br />Crafted with soul.</h2>
+          <div class="ember-line animate" style="margin-top:1.5rem;"></div>
+          <p class="about-body" style="margin-top:1.5rem;">Sacred Ember was born from a simple belief — that the spaces we inhabit shape how we feel, how we heal, and how we connect. Based in Yorkshire, we design and build bespoke saunas and wellbeing huts for people who take their health seriously.</p>
+          <p class="about-body">Every structure is a blend of Scandinavian minimalist metalwork and warm, bespoke natural timber. The floors are as considered as the ceiling. The fire is the heart of everything.</p>
+          <blockquote class="about-quote">"Creating saunas and wellbeing spaces with heart and soul — for people who care deeply about themselves, their families, and their surroundings."</blockquote>
+          <a href="#contact" class="btn btn-ember">Start a Conversation</a>
         </div>
-        <div class="hero-overlay"></div>
+      </div>
+    </div>
+  </section>
 
-        <div class="hero-content">
-            <svg class="ember-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 10L60 40L70 30L60 60L80 50L60 70L75 90L50 75L25 90L40 70L20 50L40 60L30 30L40 40L50 10Z"
-                    fill="url(#emberGradient)" stroke="var(--ember-glow)" stroke-width="1" />
-                <defs>
-                    <linearGradient id="emberGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:var(--fire-orange);stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:var(--ember-glow);stop-opacity:1" />
-                    </linearGradient>
-                </defs>
-            </svg>
-
-            <h1 class="hero-title serif">Sacred Ember</h1>
-            <p class="hero-tagline">Ignite Your Inner Fire</p>
-            <a href="#offerings" class="cta-button">Explore Our Craft</a>
+  <!-- PHILOSOPHY -->
+  <section id="philosophy" class="section" style="background:var(--char);">
+    <div class="inner">
+      <div class="text-center reveal" style="margin-bottom:3.5rem;">
+        <div class="section-label" style="justify-content:center;">Our Philosophy</div>
+        <h2 class="section-h2" style="margin-top:0.75rem;">Heart-Centred <span>Wellness</span></h2>
+        <div class="diamond-divider" style="margin-top:1.75rem;"><span></span></div>
+      </div>
+      <blockquote class="philosophy-quote reveal">
+        We create saunas and wellbeing spaces with heart and soul. Each structure is a sanctuary designed to honour the sacred ritual of self-care — bringing together the elemental power of fire with the warmth of natural timber and the precision of Scandinavian minimalism.
+      </blockquote>
+      <div class="values-grid">
+        <div class="value-card reveal rd1" data-n="01">
+          <h3 class="value-title">Elemental Fire</h3>
+          <p class="value-body">Wood-fired traditions that connect you to ancient wellness practices and the transformative power of flame.</p>
         </div>
-
-        <div class="scroll-indicator">
-            <div class="scroll-text">Scroll</div>
-            <div class="scroll-line"></div>
+        <div class="value-card reveal rd2" data-n="02">
+          <h3 class="value-title">Natural Materials</h3>
+          <p class="value-body">Bespoke timber craftsmanship combined with minimalist Scandinavian metalwork — and floors that ground you the moment you step inside.</p>
         </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="section section-dark">
-        <div class="max-w-7xl mx-auto">
-            <div class="about-split">
-                <div class="about-image-wrap">
-                    <div class="about-image-accent"></div>
-                    <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.49.jpeg"
-                        alt="Sacred Ember sauna craftsmanship">
-                </div>
-                <div class="about-text">
-                    <p class="about-overline">The Maker</p>
-                    <h2 class="about-heading serif">Built with heart.<br>Crafted with soul.</h2>
-                    <p class="about-body">
-                        Sacred Ember was born from a simple belief — that the spaces we inhabit shape how we feel,
-                        how we heal, and how we connect. Based in Yorkshire, we design and build bespoke saunas
-                        and wellbeing huts for people who take their health seriously.
-                    </p>
-                    <p class="about-body">
-                        Every structure is a blend of Scandinavian minimalist metalwork and warm, bespoke natural
-                        timber. The floors are as considered as the ceiling. The fire is the heart of everything.
-                    </p>
-                    <blockquote class="about-quote">
-                        "Creating saunas and wellbeing spaces with heart and soul — for people who care
-                        deeply about themselves, their families, and their surroundings."
-                    </blockquote>
-                    <a href="#contact" class="cta-button" style="margin-top: 1rem;">Start a Conversation</a>
-                </div>
-            </div>
+        <div class="value-card reveal rd3" data-n="03">
+          <h3 class="value-title">Whole Body Health</h3>
+          <p class="value-body">Spaces designed for heart-centred humans who care deeply about themselves, family, and community.</p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Philosophy Section -->
-    <section id="philosophy" class="section section-darker">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-header">
-                <h2 class="section-title serif">Heart-Centered Wellness</h2>
-                <p class="section-subtitle">Our Philosophy</p>
-            </div>
-
-            <div class="philosophy-content">
-                <p class="philosophy-text serif">
-                    We create saunas and wellbeing spaces with heart and soul. Each structure is a sanctuary designed
-                    to honour the sacred ritual of self-care, bringing together the elemental power of fire with the
-                    warmth of natural timber and the precision of Scandinavian minimalism.
-                </p>
-
-                <div class="values-grid">
-                    <div class="value-item">
-                        <div class="value-icon">🔥</div>
-                        <h3 class="value-title serif">Elemental Fire</h3>
-                        <p class="value-description">
-                            Wood-fired traditions that connect you to ancient wellness practices and the transformative
-                            power of flame.
-                        </p>
-                    </div>
-                    <div class="value-item" style="transition-delay: 0.2s;">
-                        <div class="value-icon">🌲</div>
-                        <h3 class="value-title serif">Natural Materials</h3>
-                        <p class="value-description">
-                            Bespoke timber craftsmanship combined with minimalist Scandinavian metalwork — and floors
-                            that ground you the moment you step inside.
-                        </p>
-                    </div>
-                    <div class="value-item" style="transition-delay: 0.4s;">
-                        <div class="value-icon">❤️</div>
-                        <h3 class="value-title serif">Whole Body Health</h3>
-                        <p class="value-description">
-                            Spaces designed for heart-centred humans who care deeply about themselves, family, and
-                            community.
-                        </p>
-                    </div>
-                </div>
-            </div>
+  <!-- PROCESS -->
+  <section id="process" class="section" style="background:var(--surface2);">
+    <div class="inner">
+      <div class="text-center reveal" style="margin-bottom:4.5rem;">
+        <div class="section-label" style="justify-content:center;">From Vision to Reality</div>
+        <h2 class="section-h2" style="margin-top:0.75rem;">How It Works</h2>
+        <div class="diamond-divider" style="margin-top:1.75rem;"><span></span></div>
+      </div>
+      <div class="process-grid">
+        <div class="process-step reveal rd1">
+          <div class="process-num">I</div>
+          <span class="process-tag">Step One</span>
+          <h3 class="process-title">Share Your Vision</h3>
+          <p class="process-body">Get in touch to tell us about your space, your needs, and what wellbeing means to you. There are no standard packages — every conversation starts from scratch.</p>
         </div>
-    </section>
-
-    <!-- Process Section -->
-    <section id="process" class="section section-dark">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-header">
-                <h2 class="section-title serif">How It Works</h2>
-                <p class="section-subtitle">From Vision to Reality</p>
-            </div>
-
-            <div class="process-grid">
-                <div class="process-step">
-                    <div class="process-number">I</div>
-                    <h3 class="process-title serif">Share Your Vision</h3>
-                    <p class="process-description">
-                        Get in touch to tell us about your space, your needs, and what wellbeing means to you.
-                        There are no standard packages here — every conversation starts from scratch.
-                    </p>
-                </div>
-                <div class="process-step" style="transition-delay: 0.2s;">
-                    <div class="process-number">II</div>
-                    <h3 class="process-title serif">Designed & Crafted</h3>
-                    <p class="process-description">
-                        Your sauna or hut is designed and built entirely bespoke — Scandinavian metalwork,
-                        warm timber, considered floors. No off-the-shelf solutions, ever.
-                    </p>
-                </div>
-                <div class="process-step" style="transition-delay: 0.4s;">
-                    <div class="process-number">III</div>
-                    <h3 class="process-title serif">Delivered & Installed</h3>
-                    <p class="process-description">
-                        We deliver and install across Yorkshire and beyond. Your space is handed over
-                        ready to use — fire lit, floors warm, nothing left to do but breathe.
-                    </p>
-                </div>
-            </div>
+        <div class="process-step reveal rd2">
+          <div class="process-num">II</div>
+          <span class="process-tag">Step Two</span>
+          <h3 class="process-title">Designed &amp; Crafted</h3>
+          <p class="process-body">Your sauna or hut is designed and built entirely bespoke — Scandinavian metalwork, warm timber, considered floors. No off-the-shelf solutions, ever.</p>
         </div>
-    </section>
-
-    <!-- Offerings Section -->
-    <section id="offerings" class="section section-darker">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-header">
-                <h2 class="section-title serif">Our Offerings</h2>
-                <p class="section-subtitle">Handcrafted Wellbeing Spaces</p>
-            </div>
-
-            <div class="product-grid">
-                <div class="product-card">
-                    <img src="images/sauna/pexels-huum-sauna-heaters-718199222-31092892.jpg"
-                        alt="Wood Fired Sauna" class="product-image">
-                    <div class="product-content">
-                        <h3 class="product-title serif">Wood Fired Sauna</h3>
-                        <p class="product-description">
-                            Experience the authentic heat of a traditional wood-fired sauna. The crackling flames,
-                            aromatic warmth, and radiant heat create an unparalleled sensory journey. Each sauna
-                            blends Scandinavian minimalist metal with warm, bespoke natural timber — and floors
-                            that are a centrepiece in their own right.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="product-card" style="transition-delay: 0.2s;">
-                    <img src="images/sauna/pexels-huum-sauna-heaters-718199222-31092916.jpg"
-                        alt="Meditation Den" class="product-image">
-                    <div class="product-content">
-                        <h3 class="product-title serif">Meditation Dens</h3>
-                        <p class="product-description">
-                            A quiet sanctuary for contemplation and inner work. Our meditation dens are intimate
-                            spaces designed to support your mindfulness practice — with natural light, grounding
-                            materials, and an atmosphere that invites stillness.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="product-card" style="transition-delay: 0.4s;">
-                    <img src="images/sauna/pexels-huum-sauna-heaters-718199222-32504774.jpg"
-                        alt="Massage Hut" class="product-image">
-                    <div class="product-content">
-                        <h3 class="product-title serif">Massage Huts</h3>
-                        <p class="product-description">
-                            Dedicated healing spaces for therapeutic bodywork. Each massage hut is crafted with
-                            warmth and privacy in mind — beautiful floors anchor the space in natural luxury,
-                            creating the perfect environment for deep restoration.
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div class="process-step reveal rd3">
+          <div class="process-num">III</div>
+          <span class="process-tag">Step Three</span>
+          <h3 class="process-title">Delivered &amp; Installed</h3>
+          <p class="process-body">We deliver and install across Yorkshire and beyond. Your space is handed over ready to use — fire lit, floors warm, nothing left to do but breathe.</p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Gallery Section -->
-    <section id="gallery" class="section section-dark">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-header">
-                <h2 class="section-title serif">Craftsmanship</h2>
-                <p class="section-subtitle">Details That Matter</p>
-            </div>
-
-            <div class="gallery-grid">
-                <a class="gallery-item glightbox"
-                   href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.19.jpeg"
-                   data-gallery="sauna-gallery"
-                   data-description="Sacred Ember sauna">
-                    <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.19.jpeg"
-                        alt="Sacred Ember sauna">
-                    <span class="gallery-zoom">
-                        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/>
-                        </svg>
-                    </span>
-                </a>
-                <a class="gallery-item glightbox" style="transition-delay: 0.1s;"
-                   href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.19%20(1).jpeg"
-                   data-gallery="sauna-gallery"
-                   data-description="Timber detail">
-                    <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.19%20(1).jpeg"
-                        alt="Timber detail">
-                    <span class="gallery-zoom">
-                        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/>
-                        </svg>
-                    </span>
-                </a>
-                <a class="gallery-item glightbox" style="transition-delay: 0.2s;"
-                   href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.20.jpeg"
-                   data-gallery="sauna-gallery"
-                   data-description="Natural floor detail">
-                    <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.20.jpeg"
-                        alt="Natural floor detail">
-                    <span class="gallery-zoom">
-                        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/>
-                        </svg>
-                    </span>
-                </a>
-                <a class="gallery-item glightbox" style="transition-delay: 0.3s;"
-                   href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.49.jpeg"
-                   data-gallery="sauna-gallery"
-                   data-description="Sauna exterior">
-                    <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.49.jpeg"
-                        alt="Sauna exterior">
-                    <span class="gallery-zoom">
-                        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/>
-                        </svg>
-                    </span>
-                </a>
-                <a class="gallery-item glightbox" style="transition-delay: 0.4s;"
-                   href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.50.jpeg"
-                   data-gallery="sauna-gallery"
-                   data-description="Bespoke craftsmanship">
-                    <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.50.jpeg"
-                        alt="Bespoke craftsmanship">
-                    <span class="gallery-zoom">
-                        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/>
-                        </svg>
-                    </span>
-                </a>
-                <a class="gallery-item glightbox" style="transition-delay: 0.5s;"
-                   href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.50%20(1).jpeg"
-                   data-gallery="sauna-gallery"
-                   data-description="Interior warmth">
-                    <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.50%20(1).jpeg"
-                        alt="Interior warmth">
-                    <span class="gallery-zoom">
-                        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/>
-                        </svg>
-                    </span>
-                </a>
-            </div>
+  <!-- OFFERINGS -->
+  <section id="offerings" class="section" style="background:var(--char);">
+    <div class="inner">
+      <div class="text-center reveal" style="margin-bottom:4.5rem;">
+        <div class="section-label" style="justify-content:center;">Handcrafted Wellbeing Spaces</div>
+        <h2 class="section-h2" style="margin-top:0.75rem;">Our Offerings</h2>
+        <div class="diamond-divider" style="margin-top:1.75rem;"><span></span></div>
+      </div>
+      <div class="offerings-grid">
+        <div class="offering-card reveal rd1">
+          <img src="images/sauna/pexels-huum-sauna-heaters-718199222-31092892.jpg" alt="Wood Fired Sauna" loading="lazy">
+          <div class="offering-overlay">
+            <span class="offering-num">01 &nbsp;—&nbsp; Primary</span>
+            <h3 class="offering-title">Wood Fired Sauna</h3>
+            <p class="offering-desc">The crackling flames, aromatic warmth, and radiant heat create an unparalleled sensory journey. Scandinavian metalwork meets warm, bespoke natural timber.</p>
+          </div>
         </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="section section-darker">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-header">
-                <h2 class="section-title serif">Kind Words</h2>
-                <p class="section-subtitle">From Our Community</p>
-            </div>
-
-            <div class="testimonial-card">
-                <p class="testimonial-quote">
-                    "The wood-fired sauna has transformed our wellness routine. The attention to detail in the
-                    craftsmanship is extraordinary — you can feel the care and soul that went into every element.
-                    It's become our family's sacred space for connection and renewal."
-                </p>
-                <p class="testimonial-author">— Sarah M., Yorkshire</p>
-            </div>
-
-            <div class="testimonial-card" style="transition-delay: 0.2s;">
-                <p class="testimonial-quote">
-                    "Our meditation den is a masterpiece. The blend of Scandinavian minimalism with warm timber
-                    creates such a peaceful, grounding atmosphere. It's where I start and end each day now.
-                    Truly life-changing."
-                </p>
-                <p class="testimonial-author">— James T., Leeds</p>
-            </div>
-
-            <div class="testimonial-card" style="transition-delay: 0.4s;">
-                <p class="testimonial-quote">
-                    "I've worked with many wellness space designers, but Sacred Ember understands the deeper purpose
-                    of these structures. They're not just building saunas — they're creating sanctuaries. The quality
-                    is unmatched."
-                </p>
-                <p class="testimonial-author">— Emma R., Wellness Coach</p>
-            </div>
+        <div class="offering-card reveal rd2">
+          <img src="saunaimages/meditationroom.png" alt="Meditation Den" loading="lazy">
+          <div class="offering-overlay">
+            <span class="offering-num">02 &nbsp;—&nbsp; Stillness</span>
+            <h3 class="offering-title">Meditation Dens</h3>
+            <p class="offering-desc">Intimate spaces designed to support your mindfulness practice — natural light, grounding materials, and an atmosphere that invites stillness.</p>
+          </div>
         </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section id="faq" class="section section-dark">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-header">
-                <h2 class="section-title serif">Common Questions</h2>
-                <p class="section-subtitle">Everything You Need to Know</p>
-            </div>
-
-            <div class="faq-container">
-
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        How long does a wood-fired sauna take to heat up?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="faq-answer-inner">
-                            Typically 45–60 minutes to reach a good heat, depending on the size of the sauna
-                            and outside temperature. The ritual of lighting the fire and waiting is part of the
-                            experience — it gives you time to slow down before you even step inside.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item" style="transition-delay: 0.1s;">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        How much outdoor space do I need?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="faq-answer-inner">
-                            Every build is bespoke, so we work with the space you have. As a rough guide, a
-                            standard sauna hut can fit comfortably in a garden from around 4m x 4m. We'll
-                            always visit your site before designing to make sure everything fits perfectly
-                            and feels right in its setting.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item" style="transition-delay: 0.15s;">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        Can saunas be installed year-round?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="faq-answer-inner">
-                            Yes. Our structures are built to withstand Yorkshire weather — four seasons, all
-                            conditions. In fact, a wood-fired sauna in winter is one of life's great pleasures.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item" style="transition-delay: 0.2s;">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        Do you work outside Yorkshire?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="faq-answer-inner">
-                            We're Yorkshire-based but happy to discuss projects further afield — particularly
-                            for the right commission. Get in touch and let's have a conversation.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item" style="transition-delay: 0.25s;">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        How long does a build take from enquiry to installation?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="faq-answer-inner">
-                            It varies depending on the complexity of the design and our current schedule.
-                            After an initial conversation we'll give you a realistic timeline. We'd rather
-                            take the time to do it properly than rush something that's meant to last a lifetime.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item" style="transition-delay: 0.3s;">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        What maintenance does a wood-fired sauna require?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="faq-answer-inner">
-                            Very little. Keep the inside clean and dry between uses, sweep out ash from the
-                            firebox regularly, and treat any exterior timber annually. We'll give you full
-                            aftercare guidance when your build is complete.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item" style="transition-delay: 0.35s;">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        Do I need planning permission?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <div class="faq-answer-inner">
-                            Most garden sauna and wellbeing hut installations fall within permitted development
-                            rights and don't require planning permission, but this depends on your property
-                            and location. We recommend checking with your local authority before proceeding,
-                            and we're happy to advise based on our experience.
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+        <div class="offering-card reveal rd3">
+          <img src="images/sauna/pexels-huum-sauna-heaters-718199222-32504774.jpg" alt="Massage Hut" loading="lazy">
+          <div class="offering-overlay">
+            <span class="offering-num">03 &nbsp;—&nbsp; Restoration</span>
+            <h3 class="offering-title">Massage Huts</h3>
+            <p class="offering-desc">Dedicated healing spaces for therapeutic bodywork — beautiful floors anchor the space in natural luxury, creating the perfect environment for deep restoration.</p>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="section section-darker">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-header">
-                <h2 class="section-title serif">Begin Your Journey</h2>
-                <p class="section-subtitle">Let's Create Together</p>
-            </div>
+  <!-- GALLERY -->
+  <section id="gallery" class="section" style="background:var(--surface);">
+    <div class="inner">
+      <div class="text-center reveal" style="margin-bottom:4.5rem;">
+        <div class="section-label" style="justify-content:center;">Details That Matter</div>
+        <h2 class="section-h2" style="margin-top:0.75rem;">Craftsmanship</h2>
+        <div class="diamond-divider" style="margin-top:1.75rem;"><span></span></div>
+      </div>
+      <div class="gallery-grid">
+        <a class="gallery-item glightbox" href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.19.jpeg" data-gallery="sauna-gallery" data-description="Sacred Ember sauna">
+          <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.19.jpeg" alt="Sacred Ember sauna" loading="lazy">
+          <span class="gallery-zoom"><svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/></svg></span>
+        </a>
+        <a class="gallery-item glightbox" href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.19%20(1).jpeg" data-gallery="sauna-gallery" data-description="Timber detail">
+          <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.19%20(1).jpeg" alt="Timber detail" loading="lazy">
+          <span class="gallery-zoom"><svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/></svg></span>
+        </a>
+        <a class="gallery-item glightbox" href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.20.jpeg" data-gallery="sauna-gallery" data-description="Natural floor detail">
+          <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.24.20.jpeg" alt="Natural floor detail" loading="lazy">
+          <span class="gallery-zoom"><svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/></svg></span>
+        </a>
+        <a class="gallery-item glightbox" href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.49.jpeg" data-gallery="sauna-gallery" data-description="Sauna exterior">
+          <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.49.jpeg" alt="Sauna exterior" loading="lazy">
+          <span class="gallery-zoom"><svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/></svg></span>
+        </a>
+        <a class="gallery-item glightbox" href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.50.jpeg" data-gallery="sauna-gallery" data-description="Bespoke craftsmanship">
+          <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.50.jpeg" alt="Bespoke craftsmanship" loading="lazy">
+          <span class="gallery-zoom"><svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/></svg></span>
+        </a>
+        <a class="gallery-item glightbox" href="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.50%20(1).jpeg" data-gallery="sauna-gallery" data-description="Interior warmth">
+          <img src="images/sauna/WhatsApp%20Image%202026-02-12%20at%2007.26.50%20(1).jpeg" alt="Interior warmth" loading="lazy">
+          <span class="gallery-zoom"><svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-3-3v6m-3-3h6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
 
-            <div class="contact-container">
-                <p style="text-align: center; margin-bottom: 3rem; color: var(--timber-lighter); font-size: 1.1rem; line-height: 1.8;">
-                    Each Sacred Ember creation is bespoke. Share your vision with us, and we'll craft a wellbeing
-                    space that honours your unique needs and environment.
-                </p>
-
-                <!-- Replace YOUR_FORM_ID with your Formspree form ID once set up at formspree.io -->
-                <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="tel" id="phone" name="phone">
-                        </div>
-                        <div class="form-group">
-                            <label for="offering">Interested In</label>
-                            <select id="offering" name="offering" required>
-                                <option value="">Select an offering</option>
-                                <option value="wood-fired-sauna">Wood Fired Sauna</option>
-                                <option value="meditation-den">Meditation Den</option>
-                                <option value="massage-hut">Massage Hut</option>
-                                <option value="custom">Bespoke Commission</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="location">Location</label>
-                        <input type="text" id="location" name="location" placeholder="Town / County">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message">Tell Us About Your Vision</label>
-                        <textarea id="message" name="message" required></textarea>
-                    </div>
-
-                    <button type="submit" class="submit-button">Send Enquiry</button>
-                </form>
-            </div>
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="section" style="background:var(--char);">
+    <div class="inner">
+      <div class="text-center reveal" style="margin-bottom:4.5rem;">
+        <div class="section-label" style="justify-content:center;">From Our Community</div>
+        <h2 class="section-h2" style="margin-top:0.75rem;">Kind Words</h2>
+        <div class="diamond-divider" style="margin-top:1.75rem;"><span></span></div>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal rd1">
+          <span class="testi-mark">"</span>
+          <p class="testi-text">The wood-fired sauna has transformed our wellness routine. The attention to detail in the craftsmanship is extraordinary — you can feel the care and soul that went into every element. It's become our family's sacred space for connection and renewal.</p>
+          <div class="testi-author">Sarah M. &nbsp;·&nbsp; Yorkshire</div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3 class="serif">Sacred Ember</h3>
-                <p>Handcrafted saunas and wellbeing huts. Creating spaces with heart and soul in Yorkshire.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Get In Touch</h3>
-                <a href="tel:07707116419">07707 116419</a>
-                <a href="#contact">Send an Enquiry</a>
-                <p>Yorkshire, United Kingdom</p>
-            </div>
-            <div class="footer-section">
-                <h3>Offerings</h3>
-                <a href="#offerings">Wood Fired Saunas</a>
-                <a href="#offerings">Meditation Dens</a>
-                <a href="#offerings">Massage Huts</a>
-                <a href="#contact">Bespoke Commissions</a>
-            </div>
-            <div class="footer-section">
-                <h3>Follow</h3>
-                <a href="https://www.facebook.com/thejointwoodworks/" target="_blank" rel="noopener">Facebook</a>
-                <a href="#" target="_blank">Instagram</a>
-            </div>
+        <div class="testi-card reveal rd2">
+          <span class="testi-mark">"</span>
+          <p class="testi-text">Our meditation den is a masterpiece. The blend of Scandinavian minimalism with warm timber creates such a peaceful, grounding atmosphere. It's where I start and end each day now. Truly life-changing.</p>
+          <div class="testi-author">James T. &nbsp;·&nbsp; Leeds</div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Sacred Ember. All rights reserved. Crafted with care in Yorkshire.</p>
+        <div class="testi-card reveal rd3">
+          <span class="testi-mark">"</span>
+          <p class="testi-text">I've worked with many wellness space designers, but Sacred Ember understands the deeper purpose of these structures. They're not just building saunas — they're creating sanctuaries. The quality is unmatched.</p>
+          <div class="testi-author">Emma R. &nbsp;·&nbsp; Wellness Coach</div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </section>
 
-    <!-- GLightbox JS -->
-    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <!-- FAQ -->
+  <section id="faq" class="section" style="background:var(--surface);">
+    <div class="inner">
+      <div class="text-center reveal" style="margin-bottom:4.5rem;">
+        <div class="section-label" style="justify-content:center;">Everything You Need to Know</div>
+        <h2 class="section-h2" style="margin-top:0.75rem;">Common Questions</h2>
+        <div class="diamond-divider" style="margin-top:1.75rem;"><span></span></div>
+      </div>
+      <div class="faq-wrap">
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How long does a wood-fired sauna take to heat up?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Typically 45–60 minutes to reach a good heat, depending on the size of the sauna and outside temperature. The ritual of lighting the fire and waiting is part of the experience — it gives you time to slow down before you even step inside.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How much outdoor space do I need?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Every build is bespoke, so we work with the space you have. As a rough guide, a standard sauna hut can fit comfortably in a garden from around 4m × 4m. We'll always visit your site before designing to make sure everything fits perfectly and feels right in its setting.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can saunas be installed year-round?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Yes. Our structures are built to withstand Yorkshire weather — four seasons, all conditions. In fact, a wood-fired sauna in winter is one of life's great pleasures.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Do you work outside Yorkshire?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">We're Yorkshire-based but happy to discuss projects further afield — particularly for the right commission. Get in touch and let's have a conversation.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How long does a build take from enquiry to installation?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">It varies depending on the complexity of the design and our current schedule. After an initial conversation we'll give you a realistic timeline. We'd rather take the time to do it properly than rush something that's meant to last a lifetime.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What maintenance does a wood-fired sauna require?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Very little. Keep the inside clean and dry between uses, sweep out ash from the firebox regularly, and treat any exterior timber annually. We'll give you full aftercare guidance when your build is complete.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Do I need planning permission?<span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Most garden sauna and wellbeing hut installations fall within permitted development rights and don't require planning permission, but this depends on your property and location. We're happy to advise based on our experience.</div></div></div>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        // Mobile nav
-        function toggleMobileNav() {
-            const nav = document.getElementById('mobileNav');
-            const btn = document.getElementById('menuBtn');
-            nav.classList.toggle('open');
-            btn.classList.toggle('open');
+  <!-- CONTACT -->
+  <section id="contact" class="section" style="background:var(--forest);">
+    <div class="inner">
+      <div class="contact-grid">
+        <div class="reveal">
+          <div class="section-label">Let's Create Together</div>
+          <h2 class="section-h2" style="margin-top:0.75rem;">Begin Your Journey</h2>
+          <div class="ember-line animate" style="margin-top:1.5rem;"></div>
+          <p style="font-size:0.9rem; color:var(--parch-dim); line-height:1.95; margin:1.75rem 0 2.75rem;">Each Sacred Ember creation is bespoke. Share your vision with us, and we'll craft a wellbeing space that honours your unique needs and environment.</p>
+          <div style="margin-bottom:2rem;">
+            <span class="contact-detail-label">Phone</span>
+            <a href="tel:07707116419" class="contact-detail-value">07707 116419</a>
+          </div>
+          <div style="margin-bottom:2rem;">
+            <span class="contact-detail-label">Based In</span>
+            <span class="contact-detail-value">Yorkshire, United Kingdom</span>
+          </div>
+          <div>
+            <span class="contact-detail-label">Social</span>
+            <a href="https://www.facebook.com/thejointwoodworks/" target="_blank" rel="noopener" class="contact-detail-value">Facebook</a>
+          </div>
+        </div>
+        <div class="reveal rd2">
+          <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <div class="form-row">
+              <div class="form-group"><label class="form-label" for="name">Name</label><input class="form-field" type="text" id="name" name="name" required></div>
+              <div class="form-group"><label class="form-label" for="email">Email</label><input class="form-field" type="email" id="email" name="email" required></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label" for="phone">Phone</label><input class="form-field" type="tel" id="phone" name="phone"></div>
+              <div class="form-group">
+                <label class="form-label" for="offering">Interested In</label>
+                <select class="form-field" id="offering" name="offering" required>
+                  <option value="">Select an offering</option>
+                  <option value="wood-fired-sauna">Wood Fired Sauna</option>
+                  <option value="meditation-den">Meditation Den</option>
+                  <option value="massage-hut">Massage Hut</option>
+                  <option value="custom">Bespoke Commission</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group"><label class="form-label" for="location">Location</label><input class="form-field" type="text" id="location" name="location" placeholder="Town / County"></div>
+            <div class="form-group"><label class="form-label" for="message">Tell Us About Your Vision</label><textarea class="form-field" id="message" name="message" required></textarea></div>
+            <button type="submit" class="btn-submit">Send Enquiry</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Sacred Ember</div>
+        <p class="footer-tagline">Handcrafted saunas and wellbeing huts. Creating spaces with heart and soul in Yorkshire.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Offerings</div>
+        <a href="#offerings" class="footer-link">Wood Fired Saunas</a>
+        <a href="#offerings" class="footer-link">Meditation Dens</a>
+        <a href="#offerings" class="footer-link">Massage Huts</a>
+        <a href="#contact" class="footer-link">Bespoke Commissions</a>
+      </div>
+      <div>
+        <div class="footer-heading">Get In Touch</div>
+        <a href="tel:07707116419" class="footer-link">07707 116419</a>
+        <a href="#contact" class="footer-link">Send an Enquiry</a>
+        <a href="https://www.facebook.com/thejointwoodworks/" target="_blank" rel="noopener" class="footer-link">Facebook</a>
+      </div>
+      <div>
+        <div class="footer-heading">Navigate</div>
+        <a href="#about" class="footer-link">About</a>
+        <a href="#process" class="footer-link">Process</a>
+        <a href="#gallery" class="footer-link">Gallery</a>
+        <a href="#faq" class="footer-link">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Sacred Ember. All rights reserved. Crafted with care in Yorkshire.</span>
+      <span>Bespoke saunas &amp; wellbeing huts</span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script>
+    // Nav scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Mobile nav
+    function toggleMobileNav() {
+      document.getElementById('mobileNav').classList.toggle('open');
+      document.getElementById('hamburger').classList.toggle('open');
+    }
+    function closeMobileNav() {
+      document.getElementById('mobileNav').classList.remove('open');
+      document.getElementById('hamburger').classList.remove('open');
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          // Trigger line grow animations inside revealed elements
+          e.target.querySelectorAll('.ember-line').forEach(l => l.classList.add('animate'));
+          observer.unobserve(e.target);
         }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal, .gallery-item').forEach(el => observer.observe(el));
 
-        function closeMobileNav() {
-            document.getElementById('mobileNav').classList.remove('open');
-            document.getElementById('menuBtn').classList.remove('open');
-        }
+    // FAQ accordion
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
 
-        // Navbar scroll effect + hero parallax
-        const navbar = document.getElementById('navbar');
-        const heroParallax = document.querySelector('.hero-parallax-wrapper');
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const href = a.getAttribute('href');
+        if (href === '#') return;
+        e.preventDefault();
+        const t = document.querySelector(href);
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
 
-        window.addEventListener('scroll', () => {
-            const scrolled = window.scrollY;
+    // GLightbox
+    GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true, openEffect: 'fade', closeEffect: 'fade' });
 
-            // Navbar
-            if (scrolled > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-
-            // Hero parallax — bg moves at 45% scroll speed so content pulls ahead
-            if (heroParallax && scrolled < window.innerHeight * 1.5) {
-                heroParallax.style.transform = `translateY(${scrolled * 0.45}px)`;
-            }
-        }, { passive: true });
-
-        // Create floating ember particles
-        const emberContainer = document.getElementById('ember-container');
-        function createEmber() {
-            const ember = document.createElement('div');
-            ember.className = 'ember-particle';
-            ember.style.left = Math.random() * 100 + '%';
-            ember.style.animationDelay = Math.random() * 5 + 's';
-            ember.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            emberContainer.appendChild(ember);
-            setTimeout(() => ember.remove(), 25000);
-        }
-
-        for (let i = 0; i < 15; i++) {
-            setTimeout(() => createEmber(), i * 2000);
-        }
-        setInterval(createEmber, 3000);
-
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll(
-            '.section-title, .section-subtitle, .product-card, .philosophy-text, .value-item, ' +
-            '.gallery-item, .testimonial-card, .process-step, .faq-item, .about-image-wrap, .about-text'
-        ).forEach(el => observer.observe(el));
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href === '#') return;
-                e.preventDefault();
-                const target = document.querySelector(href);
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // FAQ accordion
-        function toggleFaq(btn) {
-            const item = btn.closest('.faq-item');
-            const isOpen = item.classList.contains('open');
-            document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
-            if (!isOpen) item.classList.add('open');
-        }
-
-        // GLightbox init
-        const lightbox = GLightbox({
-            selector: '.glightbox',
-            touchNavigation: true,
-            loop: true,
-            openEffect: 'fade',
-            closeEffect: 'fade',
-        });
-
-        // Contact form
-        const contactForm = document.getElementById('contactForm');
-        if (contactForm) {
-            const action = contactForm.getAttribute('action');
-            const isFormspreeConfigured = action && !action.includes('YOUR_FORM_ID');
-
-            if (!isFormspreeConfigured) {
-                // Formspree not yet configured — show success state locally for demo
-                contactForm.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    const submitBtn = this.querySelector('.submit-button');
-                    const originalText = submitBtn.textContent;
-                    submitBtn.textContent = 'SENDING...';
-                    submitBtn.disabled = true;
-                    setTimeout(() => {
-                        submitBtn.textContent = 'ENQUIRY SENT ✓';
-                        submitBtn.style.background = 'linear-gradient(135deg, var(--timber-light) 0%, var(--ember-glow) 100%)';
-                        this.reset();
-                        setTimeout(() => {
-                            submitBtn.textContent = originalText;
-                            submitBtn.disabled = false;
-                            submitBtn.style.background = '';
-                        }, 3000);
-                    }, 1000);
-                });
-            }
-        }
-    </script>
-
+    // Contact form fallback
+    const form = document.getElementById('contactForm');
+    if (form && form.getAttribute('action').includes('YOUR_FORM_ID')) {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        alert('Enquiry received! Configure Formspree to enable live submissions.');
+        form.reset();
+      });
+    }
+  </script>
 </body>
-
 </html>
